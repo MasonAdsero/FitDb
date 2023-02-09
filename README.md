@@ -1,6 +1,6 @@
 # fit_db_project
 
-A new Flutter project.
+A Flutter app where users will be able to create excercises, search through them, store them and attach media to excercise they create.
 
 ## Getting Started
 
