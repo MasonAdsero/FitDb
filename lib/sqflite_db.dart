@@ -36,6 +36,11 @@ class Database {
   Future<void> updateExcercise(Excercise excercise) async {
     final db = await database;
     await db.update('excercises', excercise.toMap(),
-        where: 'id = ?', whereArgs: excercise.id);
+        where: 'id = ?', whereArgs: [excercise.id]);
+  }
+
+  Future<void> deleteExcercise(int id) async {
+    final db = await database;
+    await db.delete('excercises', where: 'id = ?', whereArgs: [id]);
   }
 }
