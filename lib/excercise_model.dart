@@ -9,6 +9,12 @@ class Excercise {
   Excercise(this.id, this.name, this.desc, [this.video, this.image]);
 
   Map<String, dynamic> toMap() {
-    return {'id': id, 'name': name, 'desc': desc};
+    return {
+      'id': id,
+      'name': name,
+      'desc': desc,
+      'video': video,
+      'image': image
+    };
   }
 }
