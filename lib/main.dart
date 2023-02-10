@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'excercise_provider.dart';
+import 'db_provider.dart';
+import 'sqflite_db.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (context) => ExcerciseList(), child: const MyApp()));
+  WidgetsFlutterBinding.ensureInitialized();
+  final db = FitDatabase();
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(
+      create: (context) => ExcerciseList(),
+    ),
+    ChangeNotifierProvider(create: ((context) => DbProvider(db)))
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
