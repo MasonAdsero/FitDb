@@ -30,7 +30,7 @@ class FitDatabase {
   //Returns a list of excercise stored locally to the db.
   Future<List<Excercise>> getExcercises() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = db.query("excercises");
+    final List<Map<String, dynamic>> maps = await db.query("excercises");
     return List.generate(maps.length, (i) {
       return Excercise(maps[i]['id'], maps[i]['name'], maps[i]['desc'],
           maps[i]['video'], maps[i]['image']);
