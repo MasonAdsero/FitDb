@@ -1,47 +1,49 @@
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
-import 'excercise_model.dart';
+import 'exercise_model.dart';
 import 'package:path/path.dart';
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 
 class FitDatabase {
-  static const dbName = 'fit_database.db';
 
   late final database;
+  String dbName;
+
+  FitDatabase.withName(this.dbName);
 
   Future<void> openDB() async {
     database = openDatabase(join(await getDatabasesPath(), dbName),
         onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE excercises(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, video TEXT, image TEXT)');
+          'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, video TEXT, image TEXT)');
     }, version: 1);
   }
 
-  Future<void> insertExcercise(Excercise excercise) async {
+  Future<void> insertExercise(Exercise exercise) async {
     final db = await database;
-    await db.insert('excercises', excercise.toMap(),
+    await db.insert('exercises', exercise.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  //Returns a list of excercise stored locally to the db.
-  Future<List<Excercise>> getExcercises() async {
+  //Returns a list of exercise stored locally to the db.
+  Future<List<Exercise>> getExercises() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query("excercises");
+    final List<Map<String, dynamic>> maps = await db.query("exercises");
     return List.generate(maps.length, (i) {
-      return Excercise(maps[i]['id'], maps[i]['name'], maps[i]['desc'],
+      return Exercise(maps[i]['id'], maps[i]['name'], maps[i]['desc'],
           maps[i]['video'], maps[i]['image']);
     });
   }
 
-  Future<void> updateExcercise(Excercise excercise) async {
+  Future<void> updateExercise(Exercise exercise) async {
     final db = await database;
-    await db.update('excercises', excercise.toMap(),
-        where: 'id = ?', whereArgs: [excercise.id]);
+    await db.update('exercises', exercise.toMap(),
+        where: 'id = ?', whereArgs: [exercise.id]);
   }
 
-  Future<void> deleteExcercise(int id) async {
+  Future<void> deleteExercise(int id) async {
     final db = await database;
-    await db.delete('excercises', where: 'id = ?', whereArgs: [id]);
+    await db.delete('exercises', where: 'id = ?', whereArgs: [id]);
   }
 }

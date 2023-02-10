@@ -1,4 +1,4 @@
-class Excercise {
+class Exercise {
   int id;
   String name;
   String desc;
@@ -6,7 +6,7 @@ class Excercise {
   String? image;
   List<int> progress = [];
   List<String> progressTimes = [];
-  Excercise(this.id, this.name, this.desc, [this.video, this.image]);
+  Exercise(this.id, this.name, this.desc, [this.video, this.image]);
 
   Map<String, dynamic> toMap() {
     return {
