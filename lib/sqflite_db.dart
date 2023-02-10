@@ -15,9 +15,9 @@ class FitDatabase {
   Future<void> openDB() async {
     database = openDatabase(join(await getDatabasesPath(), dbName),
         onCreate: (db, version) {
-          return db.execute(
-              'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, video TEXT, image TEXT)');
-        }, version: 1);
+      return db.execute(
+          'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, video TEXT, image TEXT)');
+    }, version: 1);
   }
 
   Future<void> insertExercise(Exercise exercise) async {
@@ -46,4 +46,7 @@ class FitDatabase {
     final db = await database;
     await db.delete('exercises', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<void> deleteDatabase() async =>
+      databaseFactory.deleteDatabase(join(await getDatabasesPath(), dbName));
 }
