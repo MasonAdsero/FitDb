@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'excercise_model.dart';
 import 'excercise_provider.dart';
 import 'db_provider.dart';
 import 'sqflite_db.dart';
+import 'dart:async';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final db = FitDatabase();
+  await db.openDB();
+  List<Excercise> excercises = await db.getExcercises();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
-      create: (context) => ExcerciseList(),
+      create: (context) => ExcerciseList(excercises),
     ),
     ChangeNotifierProvider(create: ((context) => DbProvider(db)))
   ], child: const MyApp()));

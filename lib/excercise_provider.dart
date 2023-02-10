@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'excercise_model.dart';
 
 class ExcerciseList with ChangeNotifier {
-  final List<Excercise> _excercises = [];
+  List<Excercise> _excercises = [];
 
   List<Excercise> get excercises => _excercises.toList();
+
+  ExcerciseList(this._excercises);
 
   void add(Excercise excercise) {
     _excercises.add(excercise);

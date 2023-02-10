@@ -1,3 +1,4 @@
+import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'excercise_model.dart';
 import 'package:path/path.dart';
@@ -9,11 +10,7 @@ class FitDatabase {
 
   late final database;
 
-  FitDatabase() {
-    _openDB();
-  }
-
-  Future<void> _openDB() async {
+  Future<void> openDB() async {
     database = openDatabase(join(await getDatabasesPath(), dbName),
         onCreate: (db, version) {
       return db.execute(
