@@ -4,12 +4,16 @@ import 'package:path/path.dart';
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 
-class Database {
+class FitDatabase {
   static const dbName = 'fit_database.db';
 
-  late var database;
+  late final database;
 
-  Future<void> openDB() async {
+  FitDatabase() {
+    _openDB();
+  }
+
+  Future<void> _openDB() async {
     database = openDatabase(join(await getDatabasesPath(), dbName),
         onCreate: (db, version) {
       return db.execute(
