@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'excercise_provider.dart';
 
 void main() {
   runApp(const MyApp());
