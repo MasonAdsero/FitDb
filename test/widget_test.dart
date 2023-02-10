@@ -22,7 +22,9 @@ void main() {
   testWidgets('Home screen displays exercises', (WidgetTester tester) async {
     WidgetsFlutterBinding.ensureInitialized();
     final db = FitDatabase.withName('test_database.db');
+
     await db.openDB();
+
     List<Exercise> exercises = await db.getExercises();
 
     final provider = ExerciseList(exercises);

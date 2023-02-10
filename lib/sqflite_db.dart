@@ -6,18 +6,18 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 
 class FitDatabase {
+  late var dbName = 'fit_database.db';
 
   late final database;
-  String dbName;
 
-  FitDatabase.withName(this.dbName);
+  FitDatabase(this.dbName);
 
   Future<void> openDB() async {
     database = openDatabase(join(await getDatabasesPath(), dbName),
         onCreate: (db, version) {
-      return db.execute(
-          'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, video TEXT, image TEXT)');
-    }, version: 1);
+          return db.execute(
+              'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, video TEXT, image TEXT)');
+        }, version: 1);
   }
 
   Future<void> insertExercise(Exercise exercise) async {
@@ -26,7 +26,7 @@ class FitDatabase {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  //Returns a list of exercise stored locally to the db.
+  //Returns a list of excercise stored locally to the db.
   Future<List<Exercise>> getExercises() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query("exercises");

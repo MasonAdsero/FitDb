@@ -9,7 +9,8 @@ import 'dart:async';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final db = FitDatabase.withName('fit_database.db');
+  //final db = FitDatabase.withName('fit_database.db');
+  final db = FitDatabase('fit_database2.db');
   await db.openDB();
 
   List<Exercise> exercises = await db.getExercises();
