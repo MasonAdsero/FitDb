@@ -8,10 +8,12 @@ class ExcerciseList with ChangeNotifier {
 
   void add(Excercise excercise) {
     _excercises.add(excercise);
+    notifyListeners();
   }
 
   void remove(Excercise excercise) {
     _excercises.remove(excercise);
+    notifyListeners();
   }
 
   //For now just pass all attributes modifiable via editing page.
@@ -24,5 +26,6 @@ class ExcerciseList with ChangeNotifier {
     _excercises[index].desc = desc;
     _excercises[index].video = video;
     _excercises[index].image = image;
+    notifyListeners();
   }
 }
