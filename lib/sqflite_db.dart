@@ -32,4 +32,10 @@ class Database {
           maps[i]['video'], maps[i]['image']);
     });
   }
+
+  Future<void> updateExcercise(Excercise excercise) async {
+    final db = await database;
+    await db.update('excercises', excercise.toMap(),
+        where: 'id = ?', whereArgs: excercise.id);
+  }
 }
