@@ -1,10 +1,3 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -18,29 +11,32 @@ import '../lib/db_provider.dart';
 import '../lib/sqflite_db.dart';
 
 void main() {
-
-  testWidgets('Home screen displays exercises', (WidgetTester tester) async {
+  setUp(() async {
     WidgetsFlutterBinding.ensureInitialized();
-    final db = FitDatabase.withName('test_database.db');
+  });
 
+  test("Database insert works as intended", () async {
+    final db = FitDatabase('test_insert.db');
     await db.openDB();
 
-    List<Exercise> exercises = await db.getExercises();
+    var exerciseOne = Exercise(1, "sit-ups", "10 sit-ups in one minute");
+    var exerciseTwo = Exercise(2, "push-ups", "10 push-ups in one minute");
 
-    final provider = ExerciseList(exercises);
-    await tester.pumpWidget(ChangeNotifierProvider(create: (context) => provider,
-    child: myApp()));
+    var exerciseList = await db.getExercises();
+    expect(exerciseList.length, 0);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    db.insertExercise(exerciseOne);
+    exerciseList = await db.getExercises();
+    expect(exerciseList.length, 1);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    db.insertExercise(exerciseTwo);
+    exerciseList = await db.getExercises();
+    expect(exerciseList.length, 2);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    db.deleteDatabase();
+  });
+
+  tearDown(() async {
+
   });
 }

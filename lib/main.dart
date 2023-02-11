@@ -10,8 +10,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //final db = FitDatabase.withName('fit_database.db');
-  final db = FitDatabase('fit_database2.db');
+  final db = FitDatabase('fit_database.db');
   await db.openDB();
+
 
   List<Exercise> exercises = await db.getExercises();
   runApp(MultiProvider(providers: [
@@ -48,14 +49,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
