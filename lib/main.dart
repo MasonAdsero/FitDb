@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'display_exercise.dart';
 import 'exercise_model.dart';
 import 'exercise_provider.dart';
 import 'db_provider.dart';
@@ -68,7 +69,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: ListTile(
                           title: Text(exerciseList.exercises[index].name),
                           onTap: () {
-                            print(exerciseList.exercises[index].toString());
+                           Navigator.push(
+                             context,
+                             MaterialPageRoute(
+                                 builder: (context) => ExerciseView(currentExercise: exerciseList.exercises[index]))
+                           );
                           }));
                 }),
           ])),
