@@ -33,20 +33,26 @@ class _ExerciseForm extends State<ExerciseForm> {
   }
 
   void _submit() async {
+    String? vidPath;
+    String? imgPath;
     if (_formKey.currentState!.validate()) {
       Directory appDocDir = await getApplicationDocumentsDirectory();
       String appDocPath = appDocDir.path;
       if (videoField.text.isNotEmpty) {
-        await Dio().download(
-            videoField.text, '$appDocPath/${titleField.text}/vid.mp4');
+        vidPath = '$appDocPath/${titleField.text}/vid.mp4';
+        await Dio().download(videoField.text, vidPath);
       }
       if (imageField.text.isNotEmpty) {
-        await Dio().download(
-            imageField.text, '$appDocPath/${titleField.text}/img.mp4');
+        imgPath = '$appDocPath/${titleField.text}/img.mp4';
+        await Dio().download(imageField.text, imgPath);
       }
-      Exercise exercise = Exercise(
-          context.read<ExerciseList>().id, titleField.text, descField.text);
+      // ignore: use_build_context_synchronously
+      Exercise exercise = Exercise(context.read<ExerciseList>().id,
+          titleField.text, descField.text, vidPath, imgPath);
+      // ignore: use_build_context_synchronously
       context.read<ExerciseList>().add(exercise);
+      // ignore: use_build_context_synchronously
+      context.read<DbProvider>().db.insertExercise(exercise);
       Navigator.pop(context);
     }
   }

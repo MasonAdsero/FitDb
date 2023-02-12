@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: ListTile(
                           title: Text(exerciseList.exercises[index].name),
                           onTap: () {
-                            print("Go to exercise");
+                            print(exerciseList.exercises[index].toString());
                           }));
                 }),
           ])),

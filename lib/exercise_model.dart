@@ -17,4 +17,10 @@ class Exercise {
       'image': image
     };
   }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return 'Exercise{$id, $name, $desc, ${video ?? "none"}, ${image ?? 'none'}}';
+  }
 }
