@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'exercise_model.dart';
@@ -46,12 +48,9 @@ class _ExerciseForm extends State<ExerciseForm> {
         imgPath = '$appDocPath/${titleField.text}/img.mp4';
         await Dio().download(imageField.text, imgPath);
       }
-      // ignore: use_build_context_synchronously
       Exercise exercise = Exercise(context.read<ExerciseList>().id,
           titleField.text, descField.text, vidPath, imgPath);
-      // ignore: use_build_context_synchronously
       context.read<ExerciseList>().add(exercise);
-      // ignore: use_build_context_synchronously
       context.read<DbProvider>().db.insertExercise(exercise);
       Navigator.pop(context);
     }
