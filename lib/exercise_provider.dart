@@ -4,6 +4,9 @@ import 'exercise_model.dart';
 class ExerciseList with ChangeNotifier {
   List<Exercise> _exercises = [];
 
+  int get id =>
+      _exercises.isEmpty ? 0 : _exercises[exercises.length - 1].id + 1;
+
   List<Exercise> get exercises => _exercises.toList();
 
   ExerciseList(this._exercises);
@@ -21,8 +24,8 @@ class ExerciseList with ChangeNotifier {
   //For now just pass all attributes modifiable via editing page.
   //If something isnt edited pass original value. May want to decompose
   //along the line.
-  void modify(Exercise exercise, String name, String desc, String video,
-      String image) {
+  void modify(
+      Exercise exercise, String name, String desc, String video, String image) {
     final int index = _exercises.indexOf(exercise);
     _exercises[index].name = name;
     _exercises[index].desc = desc;
