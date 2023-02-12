@@ -74,7 +74,7 @@ class _ExerciseForm extends State<ExerciseForm> {
                   hintText: "Enter A link for a video"),
               controller: videoField,
               validator: (String? value) {
-                if (value != null) {
+                if (value != null && value.isNotEmpty) {
                   Uri url = Uri.parse(value);
                   if (!url.isAbsolute) {
                     return 'Enter a valid link';
@@ -89,7 +89,7 @@ class _ExerciseForm extends State<ExerciseForm> {
                   hintText: "Enter A link for a image"),
               controller: imageField,
               validator: (String? value) {
-                if (value != null) {
+                if (value != null && value.isNotEmpty) {
                   Uri url = Uri.parse(value);
                   if (!url.isAbsolute) {
                     return 'Enter a valid link';
