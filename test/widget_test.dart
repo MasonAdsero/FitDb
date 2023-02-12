@@ -36,7 +36,33 @@ void main() {
     db.deleteDatabase();
   });
 
-  tearDown(() async {
 
+  testWidgets('Home screen displays exercises', (WidgetTester tester) async {
+    final db = FitDatabase('test_display.db');
+    await db.openDB();
+
+    var exerciseOne = Exercise(1, "sit-ups", "10 sit-ups in one minute");
+    var exerciseTwo = Exercise(2, "push-ups", "10 push-ups in one minute");
+
+    db.insertExercise(exerciseOne);
+    db.insertExercise(exerciseTwo);
+
+    List<Exercise> exercises = await db.getExercises();
+    final exerciseProvider = ExerciseList(exercises);
+    final dbProvider = DbProvider(db);
+
+    await tester.pumpWidget(
+      MaterialApp(
+      home: MultiProvider(providers: [
+        ChangeNotifierProvider(
+          create: (context) => ExerciseList(exercises),
+        ),
+        ChangeNotifierProvider(create: (context) => DbProvider(db))
+      ], child: MyHomePage(title: 'FitDB'))
+      )
+    );
+
+    db.deleteDatabase();
   });
+
 }
