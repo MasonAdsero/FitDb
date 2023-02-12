@@ -5,6 +5,7 @@ import 'exercise_provider.dart';
 import 'db_provider.dart';
 import 'sqflite_db.dart';
 import 'dart:async';
+import 'create_exercise.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +13,6 @@ void main() async {
   //final db = FitDatabase.withName('fit_database.db');
   final db = FitDatabase('fit_database.db');
   await db.openDB();
-
 
   List<Exercise> exercises = await db.getExercises();
   runApp(MultiProvider(providers: [
@@ -42,14 +42,11 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
 
-
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     var exerciseList = context.read<ExerciseList>();
@@ -59,26 +56,38 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
             ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              itemCount: exerciseList.exercises.length,
-              itemBuilder: (BuildContext context, int index){
-                return Card(
-                color: Colors.grey,
-                child: ListTile(
-                  title: Text(exerciseList.exercises[index].name),
-                onTap: (){
-                  print("Go to exercise");
-                })
-              );
-      }
-        ),
-      ])
-    )
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: exerciseList.exercises.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                      color: Colors.grey,
+                      child: ListTile(
+                          title: Text(exerciseList.exercises[index].name),
+                          onTap: () {
+                            print("Go to exercise");
+                          }));
+                }),
+          ])),
+      bottomNavigationBar: BottomAppBar(
+          child: Container(
+              height: 50,
+              child: Row(children: <Widget>[
+                const Spacer(),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ExerciseForm()));
+                  },
+                  child: const Icon(Icons.add_circle_outline),
+                )
+              ]))),
     );
-    }
+  }
 }
