@@ -1,4 +1,5 @@
 import 'package:fit_db_project/exercise_model.dart';
+import 'package:fit_db_project/video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,8 +10,11 @@ class ExerciseView extends StatelessWidget{
   final Exercise currentExercise;
 
 
+
   @override
   Widget build(BuildContext context) {
+    final hasVideo = currentExercise.video != null;
+
     navigateBack(){
       Navigator.pop(context, currentExercise);
     }
@@ -25,6 +29,19 @@ class ExerciseView extends StatelessWidget{
       appBar: AppBar(
         title: Text(currentExercise.name),
       ),
+      body: Column(
+        children: [
+          Text(currentExercise.desc),
+          Text(currentExercise.video ?? ""),
+          if(hasVideo)
+            SizedBox(
+              height: 500,
+              width: 500,
+              child: VideoPlayerScreen(link: currentExercise.video ?? "")
+            )
+
+          ]
+      )
     );
   }
 }

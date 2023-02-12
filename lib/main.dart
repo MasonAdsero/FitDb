@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
             ListView.builder(
                 shrinkWrap: true,
