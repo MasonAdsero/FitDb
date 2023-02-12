@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'exercise_model.dart';
 import 'exercise_provider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 import 'db_provider.dart';
 import 'sqflite_db.dart';
 import 'dart:async';
@@ -30,8 +32,18 @@ class _ExerciseForm extends State<ExerciseForm> {
     super.dispose();
   }
 
-  void _submit() {
+  void _submit() async {
     if (_formKey.currentState!.validate()) {
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String appDocPath = appDocDir.path;
+      if (videoField.text.isNotEmpty) {
+        await Dio().download(
+            videoField.text, '$appDocPath/${titleField.text}/vid.mp4');
+      }
+      if (imageField.text.isNotEmpty) {
+        await Dio().download(
+            imageField.text, '$appDocPath/${titleField.text}/img.mp4');
+      }
       Exercise exercise = Exercise(
           context.read<ExerciseList>().id, titleField.text, descField.text);
       context.read<ExerciseList>().add(exercise);
@@ -71,7 +83,7 @@ class _ExerciseForm extends State<ExerciseForm> {
             TextFormField(
               decoration: const InputDecoration(
                   labelText: "Exercise video (Optional)",
-                  hintText: "Enter A link for a video"),
+                  hintText: "Enter a link for a video"),
               controller: videoField,
               validator: (String? value) {
                 if (value != null && value.isNotEmpty) {
@@ -86,7 +98,7 @@ class _ExerciseForm extends State<ExerciseForm> {
             TextFormField(
               decoration: const InputDecoration(
                   labelText: "Exercise Image (Optional)",
-                  hintText: "Enter A link for a image"),
+                  hintText: "Enter a link for a image"),
               controller: imageField,
               validator: (String? value) {
                 if (value != null && value.isNotEmpty) {
