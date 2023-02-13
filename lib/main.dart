@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 itemCount: exerciseList.exercises.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Card(
-                      color: Colors.grey,
+                      color: Colors.grey.shade500,
                       child: ListTile(
                           title: Text(exerciseList.exercises[index].name),
                           onTap: () {
