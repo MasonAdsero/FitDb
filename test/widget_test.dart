@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:fit_db_project/main.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../lib/exercise_model.dart';
-import '../lib/exercise_provider.dart';
-import '../lib/db_provider.dart';
-import '../lib/sqflite_db.dart';
+import 'package:fit_db_project/exercise_model.dart';
+import 'package:fit_db_project/exercise_provider.dart';
+import 'package:fit_db_project/db_provider.dart';
+import 'package:fit_db_project/sqflite_db.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   setUp(() async {
@@ -36,33 +33,21 @@ void main() {
     db.deleteDatabase();
   });
 
-
   testWidgets('Home screen displays exercises', (WidgetTester tester) async {
-    final db = FitDatabase('test_display.db');
-    await db.openDB();
-
     var exerciseOne = Exercise(1, "sit-ups", "10 sit-ups in one minute");
     var exerciseTwo = Exercise(2, "push-ups", "10 push-ups in one minute");
 
-    db.insertExercise(exerciseOne);
-    db.insertExercise(exerciseTwo);
+    List<Exercise> exercises = [];
+    exercises.add(exerciseOne);
+    exercises.add(exerciseTwo);
 
-    List<Exercise> exercises = await db.getExercises();
     final exerciseProvider = ExerciseList(exercises);
-    final dbProvider = DbProvider(db);
 
-    await tester.pumpWidget(
-      MaterialApp(
-      home: MultiProvider(providers: [
-        ChangeNotifierProvider(
-          create: (context) => ExerciseList(exercises),
-        ),
-        ChangeNotifierProvider(create: (context) => DbProvider(db))
-      ], child: MyHomePage(title: 'FitDB'))
-      )
-    );
-
-    db.deleteDatabase();
+    await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+            body: ChangeNotifierProvider(
+                create: (context) => exerciseProvider,
+                child: MyHomePage(title: 'FitDB')))));
+    expect(find.byType(ListTile), findsNWidgets(2));
   });
-
 }
