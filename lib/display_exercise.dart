@@ -24,7 +24,7 @@ class ExerciseView extends StatelessWidget{
   Widget build(BuildContext context) {
     final hasUserImage = currentExercise.image != null && currentExercise.image != "";
     final hasUserVideo = currentExercise.video != null && currentExercise.video != "";
-    final hasYouTubeVideo =  currentExercise.youtubeLink != null;
+    final hasYouTubeVideo =  currentExercise.youtubeLink != null && currentExercise.youtubeLink != "";
 
     BoxDecoration textDisplay(){
       return BoxDecoration(
@@ -49,7 +49,9 @@ class ExerciseView extends StatelessWidget{
       appBar: AppBar(
         title: Text(currentExercise.name),
       ),
-      body: Column(
+      body: Center(
+      child: SingleChildScrollView(
+      child: Column(
         children: [
           Container(
             margin: const EdgeInsets.all(10),
@@ -66,21 +68,28 @@ class ExerciseView extends StatelessWidget{
                   )
             ])
           ),
+          Column(
+            children:[
+            if(hasYouTubeVideo)
+              YoutubePlayer(controller: _controller),
 
-          if(hasYouTubeVideo)
-            YoutubePlayer(controller: _controller),
+            if(hasUserImage)
+              Image.file(File(currentExercise.image!), width: 300, height: 300),
+              const SizedBox(height: 10,),
 
-          if(hasUserVideo)
-            SizedBox(
-              height: 500,
-              width: 500,
-              child: VideoPlayerScreen(link: currentExercise.video ?? "")
-            ),
-          if(hasUserImage)
-            Image.file(File(currentExercise.image!), width: 300, height: 300),
-
+              if(hasUserVideo)
+                SizedBox(
+                    height: 620,
+                    width: 300,
+                    child: VideoPlayerScreen(link: currentExercise.video ?? "")
+                ),
+          ]
+          )
           ]
       )
+
+    )
+    )
     );
   }
 }

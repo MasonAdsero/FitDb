@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:fit_db_project/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'exercise_model.dart';
@@ -23,17 +24,16 @@ class _ExerciseForm extends State<ExerciseForm> {
   final _formKey = GlobalKey<FormState>();
   final titleField = TextEditingController();
   final descField = TextEditingController();
-  final videoField = TextEditingController();
   final youtubeLinkField = TextEditingController();
   final ImagePicker _picker = ImagePicker();
+
   String? imageLink;
+  String? videoLink;
 
   @override
   void dispose() {
     titleField.dispose();
     descField.dispose();
-    videoField.dispose();
-    //imageField.dispose();
     youtubeLinkField.dispose();
     super.dispose();
   }
@@ -43,18 +43,22 @@ class _ExerciseForm extends State<ExerciseForm> {
     String? imgPath;
 
     if (_formKey.currentState!.validate()) {
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String appDocPath = appDocDir.path;
-      if (videoField.text.isNotEmpty) {
-        vidPath = '$appDocPath/${titleField.text}/vid.mp4';
-        await Dio().download(videoField.text, vidPath);
-      }
+      //Directory appDocDir = await getApplicationDocumentsDirectory();
+      //String appDocPath = appDocDir.path;
+      //if (videoField.text.isNotEmpty) {
+      //  vidPath = '$appDocPath/${titleField.text}/vid.mp4';
+      //  await Dio().download(videoField.text, vidPath);
+      //}
       //if (imageField.text.isNotEmpty) {
       //  imgPath = '$appDocPath/${titleField.text}/img.mp4';
       //  await Dio().download(imageField.text, imgPath);
       //}
       if (imageLink != null){
         imgPath = imageLink;
+      }
+
+      if (videoLink != null){
+        vidPath = videoLink;
       }
       Exercise exercise = Exercise(context.read<ExerciseList>().id,
           titleField.text, descField.text, vidPath, imgPath, youtubeLinkField.text);
@@ -75,6 +79,21 @@ class _ExerciseForm extends State<ExerciseForm> {
       setState(() {
         imageLink = imageWithPath;
       });
+
+    }
+  }
+
+  _takeVideo() async {
+    final XFile? video = await _picker.pickVideo(source: ImageSource.camera);
+    if (video != null) {
+      final videoSaveDirectory = await getApplicationDocumentsDirectory();
+      final videoSavePath = videoSaveDirectory.path;
+      final videoName = video.name;
+      final videoWithPath = '$videoSavePath/$videoName';
+      await video.saveTo(videoWithPath);
+      setState(() {
+        videoLink = videoWithPath;
+      });
     }
   }
 
@@ -84,7 +103,8 @@ class _ExerciseForm extends State<ExerciseForm> {
         appBar: AppBar(
           title: const Text("Create an exercise"),
         ),
-        body: Form(
+        body: SingleChildScrollView(
+        child: Form(
           key: _formKey,
           child: Column(children: <Widget>[
             TextFormField(
@@ -107,21 +127,6 @@ class _ExerciseForm extends State<ExerciseForm> {
                 return null;
               },
             ),
-            TextFormField(
-              decoration: const InputDecoration(
-                  labelText: "Exercise video (Optional)",
-                  hintText: "Enter a link for a video"),
-              controller: videoField,
-              validator: (String? value) {
-                if (value != null && value.isNotEmpty) {
-                  Uri url = Uri.parse(value);
-                  if (!url.isAbsolute) {
-                    return 'Enter a valid link';
-                  }
-                }
-                return null;
-              },
-            ),
 
             TextFormField(
               decoration: const InputDecoration(
@@ -139,14 +144,34 @@ class _ExerciseForm extends State<ExerciseForm> {
               },
             ),
 
+            const SizedBox(height: 10),
+
             if (imageLink != null)
               Image.file(File(imageLink!), width: 300, height: 300),
 
-            ElevatedButton(onPressed: _takeImage, child: const Text("Take Image")),
+            const SizedBox(height: 10),
+
+            if (videoLink != null)
+              SizedBox(
+                  height: 620,
+                  width: 300,
+                  child: VideoPlayerScreen(link: videoLink ?? "")
+              ),
+
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ElevatedButton(onPressed: _takeImage, child: const Text("Take Photo")),
+              const SizedBox(width: 5),
+              ElevatedButton(onPressed: _takeVideo, child: const Text("Take Video")),
+            ]
+            ),
             ElevatedButton(
                 onPressed: _submit,
                 child: const Text("Finish exercise creation"))
           ]),
-        ));
+        ))
+    );
   }
 }
