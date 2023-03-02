@@ -3,7 +3,7 @@ import 'package:fit_db_project/video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
+import 'dart:io';
 import 'create_exercise.dart';
 
 class ExerciseView extends StatelessWidget{
@@ -22,9 +22,9 @@ class ExerciseView extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    //final hasUserVideo = currentExercise.video != null;
-    final hasUserVideo = false;
-    final hasYouTubeVideo = false;
+    final hasUserImage = currentExercise.image != null && currentExercise.image != "";
+    final hasUserVideo = currentExercise.video != null && currentExercise.video != "";
+    final hasYouTubeVideo =  currentExercise.youtubeLink != null;
 
     BoxDecoration textDisplay(){
       return BoxDecoration(
@@ -67,15 +67,18 @@ class ExerciseView extends StatelessWidget{
             ])
           ),
 
-          //Text(currentExercise.video ?? ""),
           if(hasYouTubeVideo)
             YoutubePlayer(controller: _controller),
+
           if(hasUserVideo)
             SizedBox(
               height: 500,
               width: 500,
               child: VideoPlayerScreen(link: currentExercise.video ?? "")
-            )
+            ),
+          if(hasUserImage)
+            Image.file(File(currentExercise.image!), width: 300, height: 300),
+
           ]
       )
     );

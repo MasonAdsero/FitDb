@@ -4,9 +4,10 @@ class Exercise {
   String desc;
   String? video;
   String? image;
+  String? youtubeLink;
   List<int> progress = [];
   List<String> progressTimes = [];
-  Exercise(this.id, this.name, this.desc, [this.video, this.image]);
+  Exercise(this.id, this.name, this.desc, [this.video, this.image, this.youtubeLink]);
 
   Map<String, dynamic> toMap() {
     return {
@@ -14,13 +15,14 @@ class Exercise {
       'name': name,
       'desc': desc,
       'video': video,
-      'image': image
+      'image': image,
+      'youtubeLink': youtubeLink
     };
   }
 
   @override
   String toString() {
     // TODO: implement toString
-    return 'Exercise{$id, $name, $desc, ${video ?? "none"}, ${image ?? 'none'}}';
+    return 'Exercise{$id, $name, $desc, ${video ?? "none"}, ${image ?? 'none'}, ${youtubeLink ?? 'none'}}';
   }
 }

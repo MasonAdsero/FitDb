@@ -16,7 +16,7 @@ class FitDatabase {
     database = openDatabase(join(await getDatabasesPath(), dbName),
         onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, video TEXT, image TEXT)');
+          'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, video TEXT, image TEXT, youtubeLink TEXT)');
     }, version: 1);
   }
 
@@ -32,7 +32,7 @@ class FitDatabase {
     final List<Map<String, dynamic>> maps = await db.query("exercises");
     return List.generate(maps.length, (i) {
       return Exercise(maps[i]['id'], maps[i]['name'], maps[i]['desc'],
-          maps[i]['video'], maps[i]['image']);
+          maps[i]['video'], maps[i]['image'], maps[i]['youtubeLink']);
     });
   }
 

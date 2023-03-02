@@ -43,6 +43,7 @@ dependencies:
   path_provider: ^2.0.12
   youtube_player_flutter: ^8.1.2
   video_player:
+  image_picker:
 
 dev_dependencies:
   flutter_test:
