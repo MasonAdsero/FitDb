@@ -1,3 +1,4 @@
+import 'package:fit_db_project/chart.dart';
 import 'package:fit_db_project/exercise_model.dart';
 import 'package:fit_db_project/video_player.dart';
 import 'package:flutter/cupertino.dart';
@@ -71,6 +72,13 @@ class ExerciseView extends StatelessWidget {
                   height: 620,
                   width: 300,
                   child: VideoPlayerScreen(link: currentExercise.video ?? "")),
+            SizedBox(
+              height: 600,
+              width: 300,
+              child: ExerciseChart(
+                  progress: currentExercise.progress,
+                  progressTimes: currentExercise.progressTimes),
+            )
           ])
         ]))));
   }

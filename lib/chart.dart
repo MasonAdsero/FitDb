@@ -1,5 +1,6 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class ExerciseChart extends StatefulWidget {
   ExerciseChart(
@@ -12,19 +13,31 @@ class ExerciseChart extends StatefulWidget {
 
 class _ExerciseChartState extends State<ExerciseChart> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController reps = TextEditingController();
+  String? date;
 
-  _selectDate() {}
+  @override
+  void dispose() {
+    reps.dispose();
+    super.dispose();
+  }
+
+  _onSelectionChange(DateRangePickerSelectionChangedArgs args) {
+    date = args.value;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(children: [
         const Text("Exercise Graph", style: TextStyle(fontSize: 20)),
-        if (widget.progress.isNotEmpty) Container(),
+        //if (widget.progress.isNotEmpty) Container(),
         Form(
           key: _formKey,
           child: Column(children: [
             TextFormField(
+              controller: reps,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
                 labelText: 'Enter the number of repetitions',
@@ -37,10 +50,11 @@ class _ExerciseChartState extends State<ExerciseChart> {
               }),
               keyboardType: TextInputType.number,
             ),
-            ElevatedButton.icon(
-                onPressed: _selectDate,
-                icon: const Icon(Icons.calendar_today),
-                label: const Text("Pick a date"))
+            SfDateRangePicker(
+              view: DateRangePickerView.month,
+              onSelectionChanged: _onSelectionChange,
+              selectionMode: DateRangePickerSelectionMode.single,
+            )
           ]),
         )
       ]),
