@@ -12,6 +12,9 @@ class ExerciseChart extends StatefulWidget {
 
 class _ExerciseChartState extends State<ExerciseChart> {
   final _formKey = GlobalKey<FormState>();
+
+  _selectDate() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
