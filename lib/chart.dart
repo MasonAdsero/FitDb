@@ -1,10 +1,10 @@
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:fit_db_project/db_provider.dart';
 import 'package:fit_db_project/exercise_model.dart';
 import 'package:fit_db_project/exercise_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:fit_db_project/drawChart.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:intl/intl.dart';
 
@@ -28,7 +28,7 @@ class _ExerciseChartState extends State<ExerciseChart> {
   }
 
   _onSelectionChange(DateRangePickerSelectionChangedArgs args) {
-    _selected = DateFormat('MM-dd-yyyy').format(args.value);
+    _selected = DateFormat('yyyy-MM-dd').format(args.value);
     setState(() {});
   }
 
@@ -50,7 +50,10 @@ class _ExerciseChartState extends State<ExerciseChart> {
     return Scaffold(
       body: Column(children: [
         const Text("Exercise Graph", style: TextStyle(fontSize: 20)),
-        //if (widget.progress.isNotEmpty) Container(),
+        if (widget.currentExercise.progress.isNotEmpty)
+          DrawChart(
+              progress: widget.currentExercise.progress,
+              progressTimes: widget.currentExercise.progressTimes),
         Form(
           key: _formKey,
           child: Column(children: [
