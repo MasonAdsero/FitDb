@@ -1,14 +1,16 @@
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:fit_db_project/db_provider.dart';
+import 'package:fit_db_project/exercise_model.dart';
+import 'package:fit_db_project/exercise_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:intl/intl.dart';
 
 class ExerciseChart extends StatefulWidget {
-  ExerciseChart(
-      {super.key, required this.progress, required this.progressTimes});
-  List<int> progress;
-  List<String> progressTimes;
+  ExerciseChart({super.key, required this.currentExercise});
+  final Exercise currentExercise;
   @override
   State<ExerciseChart> createState() => _ExerciseChartState();
 }
@@ -16,6 +18,7 @@ class ExerciseChart extends StatefulWidget {
 class _ExerciseChartState extends State<ExerciseChart> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController reps = TextEditingController();
+  String? _selected;
   String? _date;
 
   @override
@@ -25,8 +28,21 @@ class _ExerciseChartState extends State<ExerciseChart> {
   }
 
   _onSelectionChange(DateRangePickerSelectionChangedArgs args) {
-    _date = DateFormat('MM-dd-yyyy').format(args.value);
+    _selected = DateFormat('MM-dd-yyyy').format(args.value);
     setState(() {});
+  }
+
+  _addToGraph() {
+    setState(() {
+      if (_formKey.currentState!.validate()) {
+        context
+            .read<ExerciseList>()
+            .addProgress(widget.currentExercise, int.parse(reps.text), _date!);
+        _date = null;
+        _formKey.currentState!.reset();
+        reps.text = "";
+      }
+    });
   }
 
   @override
@@ -45,7 +61,7 @@ class _ExerciseChartState extends State<ExerciseChart> {
                 labelText: 'Enter the number of repetitions',
               ),
               validator: ((value) {
-                if (value == null) {
+                if (value == null || value.isEmpty) {
                   return "Please enter a number";
                 }
                 return null;
@@ -82,6 +98,15 @@ class _ExerciseChartState extends State<ExerciseChart> {
                                 MaterialButton(
                                   child: Text("OK"),
                                   onPressed: () {
+                                    setState(() {
+                                      _date = _selected!;
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                MaterialButton(
+                                  child: Text("Cancel"),
+                                  onPressed: () {
                                     Navigator.pop(context);
                                   },
                                 )
@@ -95,9 +120,16 @@ class _ExerciseChartState extends State<ExerciseChart> {
               height: 15,
             ),
             if (_date != null)
-              Text("Workout date: ${_date!}", style: TextStyle(fontSize: 20)),
+              Text("Workout date: ${_date}",
+                  style: const TextStyle(fontSize: 20)),
           ]),
-        )
+        ),
+        ElevatedButton(
+            onPressed: _addToGraph,
+            child: const Text(
+              "Add workout to graph",
+              style: TextStyle(fontSize: 20),
+            ))
       ]),
     );
   }

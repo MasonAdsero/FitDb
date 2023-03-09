@@ -16,6 +16,13 @@ class ExerciseList with ChangeNotifier {
     notifyListeners();
   }
 
+  void addProgress(Exercise exercise, int progressNum, String progressDate) {
+    final int index = _exercises.indexOf(exercise);
+    _exercises[index].progress.add(progressNum);
+    _exercises[index].progressTimes.add(progressDate);
+    notifyListeners();
+  }
+
   void remove(Exercise exercise) {
     _exercises.remove(exercise);
     notifyListeners();

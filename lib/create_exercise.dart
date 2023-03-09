@@ -53,15 +53,20 @@ class _ExerciseForm extends State<ExerciseForm> {
       //  imgPath = '$appDocPath/${titleField.text}/img.mp4';
       //  await Dio().download(imageField.text, imgPath);
       //}
-      if (imageLink != null){
+      if (imageLink != null) {
         imgPath = imageLink;
       }
 
-      if (videoLink != null){
+      if (videoLink != null) {
         vidPath = videoLink;
       }
-      Exercise exercise = Exercise(context.read<ExerciseList>().id,
-          titleField.text, descField.text, vidPath, imgPath, youtubeLinkField.text);
+      Exercise exercise = Exercise(
+          context.read<ExerciseList>().id,
+          titleField.text,
+          descField.text,
+          vidPath,
+          imgPath,
+          youtubeLinkField.text);
       context.read<ExerciseList>().add(exercise);
       context.read<DbProvider>().db.insertExercise(exercise);
       Navigator.pop(context);
@@ -79,7 +84,6 @@ class _ExerciseForm extends State<ExerciseForm> {
       setState(() {
         imageLink = imageWithPath;
       });
-
     }
   }
 
@@ -104,7 +108,7 @@ class _ExerciseForm extends State<ExerciseForm> {
           title: const Text("Create an exercise"),
         ),
         body: SingleChildScrollView(
-        child: Form(
+            child: Form(
           key: _formKey,
           child: Column(children: <Widget>[
             TextFormField(
@@ -113,7 +117,9 @@ class _ExerciseForm extends State<ExerciseForm> {
                   hintText: "Enter the title of the exercise"),
               controller: titleField,
               validator: (String? value) {
-                if (value == null) return 'Please enter a title';
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a title';
+                }
                 return null;
               },
             ),
@@ -123,11 +129,11 @@ class _ExerciseForm extends State<ExerciseForm> {
                   hintText: "Enter a description for the exercise"),
               controller: descField,
               validator: (String? value) {
-                if (value == null) return 'Please enter a description';
+                if (value == null || value.isEmpty)
+                  return 'Please enter a description';
                 return null;
               },
             ),
-
             TextFormField(
               decoration: const InputDecoration(
                   labelText: "Exercise Youtube Video Link (Optional)",
@@ -143,35 +149,29 @@ class _ExerciseForm extends State<ExerciseForm> {
                 return null;
               },
             ),
-
             const SizedBox(height: 10),
-
             if (imageLink != null)
               Image.file(File(imageLink!), width: 300, height: 300),
-
             const SizedBox(height: 10),
-
             if (videoLink != null)
               SizedBox(
                   height: 620,
                   width: 300,
-                  child: VideoPlayerScreen(link: videoLink ?? "")
-              ),
-
+                  child: VideoPlayerScreen(link: videoLink ?? "")),
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ElevatedButton(onPressed: _takeImage, child: const Text("Take Photo")),
-              const SizedBox(width: 5),
-              ElevatedButton(onPressed: _takeVideo, child: const Text("Take Video")),
-            ]
-            ),
+                children: [
+                  ElevatedButton(
+                      onPressed: _takeImage, child: const Text("Take Photo")),
+                  const SizedBox(width: 5),
+                  ElevatedButton(
+                      onPressed: _takeVideo, child: const Text("Take Video")),
+                ]),
             ElevatedButton(
                 onPressed: _submit,
                 child: const Text("Finish exercise creation"))
           ]),
-        ))
-    );
+        )));
   }
 }

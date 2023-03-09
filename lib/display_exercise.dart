@@ -10,7 +10,6 @@ import 'create_exercise.dart';
 class ExerciseView extends StatelessWidget {
   ExerciseView({super.key, required this.currentExercise});
   final Exercise currentExercise;
-
   static String myVideoId = "";
 
   final YoutubePlayerController _controller = YoutubePlayerController(
@@ -76,8 +75,8 @@ class ExerciseView extends StatelessWidget {
               height: 600,
               width: 300,
               child: ExerciseChart(
-                  progress: currentExercise.progress,
-                  progressTimes: currentExercise.progressTimes),
+                currentExercise: currentExercise,
+              ),
             )
           ])
         ]))));
