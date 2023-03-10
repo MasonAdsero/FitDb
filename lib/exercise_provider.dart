@@ -49,4 +49,10 @@ class ExerciseList with ChangeNotifier {
     _exercises[index].image = image;
     notifyListeners();
   }
+
+  void modifyWithExercise(Exercise oldExercise, Exercise newExercise){
+      final int index = _exercises.indexOf(oldExercise);
+      _exercises[index] = newExercise;
+      notifyListeners();
+  }
 }

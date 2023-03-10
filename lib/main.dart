@@ -12,7 +12,7 @@ import 'create_exercise.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final db = FitDatabase('fit_database2.db');
+  final db = FitDatabase('fit_database3.db');
   await db.openDB();
 
   List<Exercise> exercises = await db.getExercises();

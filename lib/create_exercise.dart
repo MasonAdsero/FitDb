@@ -39,33 +39,13 @@ class _ExerciseForm extends State<ExerciseForm> {
   }
 
   void _submit() async {
-    String? vidPath;
-    String? imgPath;
-
     if (_formKey.currentState!.validate()) {
-      //Directory appDocDir = await getApplicationDocumentsDirectory();
-      //String appDocPath = appDocDir.path;
-      //if (videoField.text.isNotEmpty) {
-      //  vidPath = '$appDocPath/${titleField.text}/vid.mp4';
-      //  await Dio().download(videoField.text, vidPath);
-      //}
-      //if (imageField.text.isNotEmpty) {
-      //  imgPath = '$appDocPath/${titleField.text}/img.mp4';
-      //  await Dio().download(imageField.text, imgPath);
-      //}
-      if (imageLink != null) {
-        imgPath = imageLink;
-      }
-
-      if (videoLink != null) {
-        vidPath = videoLink;
-      }
       Exercise exercise = Exercise(
           context.read<ExerciseList>().id,
           titleField.text,
           descField.text,
-          vidPath,
-          imgPath,
+          videoLink,
+          imageLink,
           youtubeLinkField.text);
       context.read<ExerciseList>().add(exercise);
       context.read<DbProvider>().db.insertExercise(exercise);

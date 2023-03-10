@@ -62,7 +62,7 @@ class ExerciseView extends StatelessWidget {
           Column(children: [
             if (hasYouTubeVideo) YoutubePlayer(controller: _controller),
             if (hasUserImage)
-              Image.file(File(currentExercise.image!), width: 300, height: 300),
+               Image.file(File(currentExercise.image!), width: 300, height: 300),
             const SizedBox(
               height: 10,
             ),

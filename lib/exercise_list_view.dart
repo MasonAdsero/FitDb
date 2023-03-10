@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'db_provider.dart';
 import 'display_exercise.dart';
+import 'edit_exercise.dart';
 import 'exercise_model.dart';
 import 'exercise_provider.dart';
 
@@ -66,7 +67,13 @@ class _ExerciseListViewState extends State<ExerciseListView> {
                         ),
                       );
                     } else {
-                      // edit widget goes here
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              EditExerciseForm(exercise, context),
+                        ),
+                      );
                     }
                   },
                 ),
