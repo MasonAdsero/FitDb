@@ -17,11 +17,19 @@ class ExerciseList with ChangeNotifier {
     notifyListeners();
   }
 
-  void addProgress(Exercise exercise, int progressNum, String progressDate) {
+  bool addProgress(Exercise exercise, int progressNum, String progressDate) {
+    bool update = false;
     final int index = _exercises.indexOf(exercise);
-    _exercises[index].progress.add(progressNum);
-    _exercises[index].progressTimes.add(progressDate);
+    if (_exercises[index].progressTimes.contains(progressDate)) {
+      int progIndex = _exercises[index].progressTimes.indexOf(progressDate);
+      _exercises[index].progress[progIndex] = progressNum;
+      update = true;
+    } else {
+      _exercises[index].progressTimes.add(progressDate);
+      _exercises[index].progress.add(progressNum);
+    }
     notifyListeners();
+    return update;
   }
 
   void remove(Exercise exercise) {
