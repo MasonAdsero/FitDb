@@ -46,10 +46,25 @@ class FitDatabase {
   Future<List<Exercise>> getExercises() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query("exercises");
-    return List.generate(maps.length, (i) {
-      return Exercise(maps[i]['id'], maps[i]['name'], maps[i]['desc'],
-          maps[i]['video'], maps[i]['image'], maps[i]['youtubeLink']);
-    });
+
+    List<Exercise> exercises = [];
+    for (int i = 0; i < maps.length; i++) {
+      List<Map<String, dynamic>> chartMaps = await db
+          .query("charts", where: 'exercise_id=?', whereArgs: [maps[i]['id']]);
+      Exercise exercise = Exercise(
+          maps[i]['id'],
+          maps[i]['name'],
+          maps[i]['desc'],
+          maps[i]['video'],
+          maps[i]['image'],
+          maps[i]['youtubeLink']);
+      for (int j = 0; j < chartMaps.length; j++) {
+        exercise.progress.add(chartMaps[j]['progress']);
+        exercise.progressTimes.add(chartMaps[j]['progressTimes']);
+      }
+      exercises.add(exercise);
+    }
+    return exercises;
   }
 
   Future<void> updateExercise(Exercise exercise) async {
