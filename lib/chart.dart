@@ -32,7 +32,7 @@ class _ExerciseChartState extends State<ExerciseChart> {
     setState(() {});
   }
 
-  _addToGraph() {
+  _addToGraph() async {
     bool update = false;
     setState(() {
       if (_formKey.currentState!.validate() && _date != null) {
@@ -40,6 +40,15 @@ class _ExerciseChartState extends State<ExerciseChart> {
         update = context
             .read<ExerciseList>()
             .addProgress(widget.currentExercise, progress, _date!);
+        update
+            ? context
+                .read<DbProvider>()
+                .db
+                .updateChartData(widget.currentExercise, progress, _date!)
+            : context
+                .read<DbProvider>()
+                .db
+                .insertChartData(widget.currentExercise, progress, _date!);
         _date = null;
         _formKey.currentState!.reset();
         reps.text = "";

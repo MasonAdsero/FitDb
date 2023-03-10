@@ -21,9 +21,11 @@ class _DrawChartState extends State<DrawChart> {
             widget.progress[index]));
     return Container(
       child: SfCartesianChart(
-        primaryXAxis: DateTimeAxis(borderColor: Colors.black),
+        isTransposed: true,
+        primaryXAxis: DateTimeAxis(
+            borderColor: Colors.black, intervalType: DateTimeIntervalType.days),
         series: <ChartSeries<ChartData, DateTime>>[
-          LineSeries<ChartData, DateTime>(
+          BarSeries<ChartData, DateTime>(
               dataSource: chartData,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y)
