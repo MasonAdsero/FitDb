@@ -3,6 +3,7 @@ import 'exercise_model.dart';
 
 class ExerciseList with ChangeNotifier {
   List<Exercise> _exercises = [];
+  bool createMode = true;
 
   int get id =>
       _exercises.isEmpty ? 0 : _exercises[exercises.length - 1].id + 1;
