@@ -18,8 +18,13 @@ class ExerciseList with ChangeNotifier {
 
   void addProgress(Exercise exercise, int progressNum, String progressDate) {
     final int index = _exercises.indexOf(exercise);
-    _exercises[index].progress.add(progressNum);
-    _exercises[index].progressTimes.add(progressDate);
+    if (_exercises[index].progressTimes.contains(progressDate)) {
+      int progIndex = _exercises[index].progressTimes.indexOf(progressDate);
+      _exercises[index].progress[progIndex] = progressNum;
+    } else {
+      _exercises[index].progressTimes.add(progressDate);
+      _exercises[index].progress.add(progressNum);
+    }
     notifyListeners();
   }
 
