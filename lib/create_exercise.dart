@@ -8,9 +8,6 @@ import 'exercise_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'db_provider.dart';
-import 'sqflite_db.dart';
-import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ExerciseForm extends StatefulWidget {
@@ -81,6 +78,19 @@ class _ExerciseForm extends State<ExerciseForm> {
     }
   }
 
+  void removeImage(){
+    setState(() {
+      imageLink = null;
+    });
+
+  }
+
+  void removeVideo(){
+    setState(() {
+      videoLink = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -147,6 +157,16 @@ class _ExerciseForm extends State<ExerciseForm> {
                   const SizedBox(width: 5),
                   ElevatedButton(
                       onPressed: _takeVideo, child: const Text("Take Video")),
+                ]),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      onPressed: removeImage, child: const Text("Remove Photo")),
+                  const SizedBox(width: 5),
+                  ElevatedButton(
+                      onPressed: removeVideo, child: const Text("Remove Video")),
                 ]),
             ElevatedButton(
                 onPressed: _submit,
