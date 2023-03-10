@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'display_exercise.dart';
@@ -13,7 +15,6 @@ void main() async {
 
   final db = FitDatabase('fit_database.db');
   await db.openDB();
-
   List<Exercise> exercises = await db.getExercises();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
@@ -69,11 +70,12 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: ListTile(
                           title: Text(exerciseList.exercises[index].name),
                           onTap: () {
-                           Navigator.push(
-                             context,
-                             MaterialPageRoute(
-                                 builder: (context) => ExerciseView(currentExercise: exerciseList.exercises[index]))
-                           );
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ExerciseView(
+                                        currentExercise:
+                                            exerciseList.exercises[index])));
                           }));
                 }),
           ])),

@@ -33,11 +33,13 @@ class _ExerciseChartState extends State<ExerciseChart> {
   }
 
   _addToGraph() {
+    bool update = false;
     setState(() {
-      if (_formKey.currentState!.validate()) {
-        context
+      if (_formKey.currentState!.validate() && _date != null) {
+        int progress = int.parse(reps.text);
+        update = context
             .read<ExerciseList>()
-            .addProgress(widget.currentExercise, int.parse(reps.text), _date!);
+            .addProgress(widget.currentExercise, progress, _date!);
         _date = null;
         _formKey.currentState!.reset();
         reps.text = "";

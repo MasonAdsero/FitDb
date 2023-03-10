@@ -14,9 +14,11 @@ class FitDatabase {
 
   Future<void> openDB() async {
     database = openDatabase(join(await getDatabasesPath(), dbName),
-        onCreate: (db, version) {
-      return db.execute(
+        onCreate: (db, version) async {
+      await db.execute(
           'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, video TEXT, image TEXT, youtubeLink TEXT)');
+      await db.execute(
+          'CREATE TABLE charts(id INTEGER PRIMARY KEY, exercise_id INTEGER NOT NULL, progress INTEGER, progressTimes TEXT, FOREIGN KEY (exercise_id) REFERENCES exercises (id))');
     }, version: 1);
   }
 
@@ -24,6 +26,20 @@ class FitDatabase {
     final db = await database;
     await db.insert('exercises', exercise.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> insertChartData(
+      Exercise exercise, int progress, String progressTimes) async {
+    final db = await database;
+    await db.insert('charts', mapChart(exercise.id, progress, progressTimes));
+  }
+
+  Future<void> updateChartData(
+      Exercise exercise, int progress, String progressTimes) async {
+    final db = await database;
+    await db.update('charts', mapChart(exercise.id, progress, progressTimes),
+        where: "exercise_id = ? and progressTimes = ?",
+        whereArgs: [exercise.id, progressTimes]);
   }
 
   //Returns a list of excercise stored locally to the db.
@@ -45,6 +61,15 @@ class FitDatabase {
   Future<void> deleteExercise(int id) async {
     final db = await database;
     await db.delete('exercises', where: 'id = ?', whereArgs: [id]);
+  }
+
+  Map<String, dynamic> mapChart(
+      int exercise, int progress, String progressTimes) {
+    return {
+      'exercise_id': exercise,
+      'progress': progress,
+      'progressTimes': progressTimes
+    };
   }
 
   Future<void> deleteDatabase() async =>
