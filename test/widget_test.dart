@@ -8,6 +8,7 @@ import 'package:fit_db_project/sqflite_db.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'widget_test.mocks.dart';
 
 extension WithScaffold on WidgetTester {
   pumpWithScaffold(Widget widget) async =>
@@ -62,5 +63,6 @@ void main() {
 
   testWidgets('Exercise form displays all fields', (widgetTester) async {
     final exerciseProvider = ExerciseList([]);
+    final db = MockFitDatabase();
   });
 }
