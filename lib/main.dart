@@ -8,12 +8,18 @@ import 'db_provider.dart';
 import 'sqflite_db.dart';
 import 'dart:async';
 import 'create_exercise.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final db = FitDatabase('fit_database3.db');
   await db.openDB();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   List<Exercise> exercises = await db.getExercises();
   runApp(MultiProvider(providers: [

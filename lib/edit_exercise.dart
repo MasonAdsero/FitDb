@@ -56,7 +56,7 @@ class _EditExerciseForm extends State<EditExerciseForm> {
           youtubeLinkField.text);
 
       context.read<ExerciseList>().modifyWithExercise(widget.exerciseCopy, exercise);
-      context.read<DbProvider>().db.updateExercise(exercise);
+      context.read<DbProvider>().updateExercise(exercise);
       Navigator.pop(context);
     }
   }

@@ -45,7 +45,7 @@ class _ExerciseForm extends State<ExerciseForm> {
           imageLink,
           youtubeLinkField.text);
       context.read<ExerciseList>().add(exercise);
-      context.read<DbProvider>().db.insertExercise(exercise);
+      context.read<DbProvider>().insertExercise(exercise);
       Navigator.pop(context);
     }
   }

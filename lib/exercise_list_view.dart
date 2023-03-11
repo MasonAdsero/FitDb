@@ -54,7 +54,7 @@ class _ExerciseListViewState extends State<ExerciseListView> {
                     icon: const Icon(Icons.delete),
                     onPressed: () {
                         exerciseList.remove(exercise);
-                        context.read<DbProvider>().db.deleteExercise(exercise.id);
+                        context.read<DbProvider>().deleteExercise(exercise.id);
                     },
                   ) : null,
                   onTap: () {
