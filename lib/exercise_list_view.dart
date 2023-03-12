@@ -51,12 +51,15 @@ class _ExerciseListViewState extends State<ExerciseListView> {
                   title: Text(exercise.name),
                   trailing: _isEditing
                       ? IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                        exerciseList.remove(exercise);
-                        context.read<DbProvider>().deleteExercise(exercise.id);
-                    },
-                  ) : null,
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            exerciseList.remove(exercise);
+                            context
+                                .read<DbProvider>()
+                                .deleteExercise(exercise.id);
+                          },
+                        )
+                      : null,
                   onTap: () {
                     if (!_isEditing) {
                       Navigator.push(
@@ -70,8 +73,7 @@ class _ExerciseListViewState extends State<ExerciseListView> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>
-                              EditExerciseForm(exercise, context),
+                          builder: (context) => EditExerciseForm(exercise),
                         ),
                       );
                     }

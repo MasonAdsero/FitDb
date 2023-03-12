@@ -1,4 +1,5 @@
 import 'package:fit_db_project/chart.dart';
+import 'package:fit_db_project/edit_exercise.dart';
 import 'package:fit_db_project/firebase_data.dart';
 import 'package:flutter/material.dart';
 import 'package:fit_db_project/create_exercise.dart';
@@ -13,6 +14,7 @@ import 'package:fit_db_project/chart.dart';
 import 'package:fit_db_project/drawChart.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'widget_test.mocks.dart';
 
@@ -175,5 +177,63 @@ void main() {
     await tester.enterText(addReps, "10");
 
     expect(find.byType(DrawChart), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.byKey(const Key("AddWorkOutGraph")),
+      50,
+    );
+    await tester.tap(find.byKey(const Key("AddWorkOutGraph")));
+  });
+
+  testWidgets("Daterangepicker shows up when add a date clicked",
+      (WidgetTester tester) async {
+    Exercise exercise = Exercise(0, "Push-Ups", "Strict form push Ups");
+    exercise.progress = [1];
+    exercise.progressTimes = ["2023-03-14"];
+    await tester.pumpWithProvider(ExerciseChart(currentExercise: exercise));
+    final picker = find.byKey(const Key("AddDate"));
+    await tester.tap(picker);
+    await tester.pump();
+    expect(find.byType(SfDateRangePicker), findsOneWidget);
+    //Confirm we do not add a date with nothing picked
+    await tester.tap(find.text("OK"));
+    await tester.pump();
+    expect(find.byType(SfDateRangePicker), findsOneWidget);
+    //Confirm daterange picker gone when cancel is tapped
+    await tester.tap(find.text("Cancel"));
+    await tester.pump();
+    expect(find.byType(SfDateRangePicker), findsNothing);
+  });
+
+  testWidgets("EditExerciseForm shows all buttons and fields",
+      (WidgetTester tester) async {
+    Exercise exercise = Exercise(0, "Push-Ups", "Strict form push Ups");
+    exercise.progress = [1];
+    exercise.progressTimes = ["2023-03-14"];
+    await tester.pumpWithProvider(EditExerciseForm(exercise));
+    final title = find.byKey(const Key("Title"));
+    final desc = find.byKey(const Key("Desc"));
+    final you = find.byKey(const Key("YouTube"));
+    final takePhoto = find.text("Take Photo");
+    final takeVideo = find.text("Take Video");
+    final removePhoto = find.text("Remove Photo");
+    final removeVideo = find.text("Remove Video");
+    expect(title, findsOneWidget);
+    expect(desc, findsOneWidget);
+    expect(you, findsOneWidget);
+    expect(takePhoto, findsOneWidget);
+    expect(takeVideo, findsOneWidget);
+    expect(removePhoto, findsOneWidget);
+    expect(removeVideo, findsOneWidget);
+  });
+
+  testWidgets("EditExerciseForm confirm navigation on take phot press",
+      (WidgetTester tester) async {
+    Exercise exercise = Exercise(0, "Push-Ups", "Strict form push Ups");
+    exercise.progress = [1];
+    exercise.progressTimes = ["2023-03-14"];
+    await tester.pumpWithProvider(EditExerciseForm(exercise));
+    final takePhoto = find.text("Take Photo");
+    await tester.tap(takePhoto);
+    await tester.pump();
   });
 }
