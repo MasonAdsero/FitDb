@@ -31,6 +31,17 @@ extension WithScaffold on WidgetTester {
         ChangeNotifierProvider<DbProvider>(
             create: ((context) => MockDbProvider()))
       ], child: widget))));
+
+  pumpWithProviderExercise(Widget widget, var prov) async =>
+      pumpWidget(MaterialApp(
+          home: Scaffold(
+              body: MultiProvider(providers: [
+        ChangeNotifierProvider<ExerciseList>(
+          create: (context) => prov,
+        ),
+        ChangeNotifierProvider<DbProvider>(
+            create: ((context) => MockDbProvider()))
+      ], child: widget))));
 }
 
 @GenerateMocks([FitDatabase, FirestoreTaskDataStore, DbProvider])
@@ -226,7 +237,7 @@ void main() {
     expect(removeVideo, findsOneWidget);
   });
 
-  testWidgets("EditExerciseForm confirm navigation on take phot press",
+  testWidgets("EditExerciseForm confirm navigation on take photo press",
       (WidgetTester tester) async {
     Exercise exercise = Exercise(0, "Push-Ups", "Strict form push Ups");
     exercise.progress = [1];
@@ -234,6 +245,22 @@ void main() {
     await tester.pumpWithProvider(EditExerciseForm(exercise));
     final takePhoto = find.text("Take Photo");
     await tester.tap(takePhoto);
-    await tester.pump();
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets("EditExerciseForm confirm navigation on take video press",
+      (WidgetTester tester) async {
+    Exercise exercise = Exercise(0, "Push-Ups", "Strict form push ups");
+    exercise.image = "random";
+    exercise.video = "random";
+    final prov = ExerciseList([exercise]);
+    await tester.pumpWithProviderExercise(EditExerciseForm(exercise), prov);
+    //expect(find.text("Push-Ups"), findsOneWidget);
+    //expect(find.text("Strict form push ups"), findsOneWidget);
+    await tester.dragUntilVisible(find.byKey(const Key("finishEditing")),
+        find.byType(SingleChildScrollView), const Offset(0, 50));
+    await tester.tap(find.byKey(const Key("finishEditing")));
+    await tester.pumpAndSettle();
+    expect(find.byType(EditExerciseForm), findsNothing);
   });
 }
