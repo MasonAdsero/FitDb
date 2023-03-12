@@ -1,5 +1,6 @@
 import 'package:fit_db_project/chart.dart';
 import 'package:fit_db_project/edit_exercise.dart';
+import 'package:fit_db_project/exercise_list_view.dart';
 import 'package:fit_db_project/firebase_data.dart';
 import 'package:flutter/material.dart';
 import 'package:fit_db_project/create_exercise.dart';
@@ -260,5 +261,62 @@ void main() {
     await tester.tap(find.byKey(const Key("finishEditing")));
     await tester.pumpAndSettle();
     expect(find.byType(EditExerciseForm), findsNothing);
+  });
+
+  testWidgets('Exercise can be created and viewed through user input', (WidgetTester tester) async {
+    await tester.pumpWithScaffold(MultiProvider(providers: [
+      ChangeNotifierProvider(
+        create: (context) => ExerciseList([]),
+      ),
+      ChangeNotifierProvider<DbProvider>(
+          create: (context) => MockDbProvider())
+    ], child: const MyApp()));
+    expect(find.byType(Card), findsNothing);
+    await tester.tap(find.byType(ElevatedButton).last);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextFormField).first, "Test Widget 1");
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextFormField).at(1), "Test Widget 1");
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ElevatedButton).last);
+    await tester.pumpAndSettle();
+    expect(find.byType(Card), findsOneWidget);
+    expect(find.text("Test Widget 1"), findsOneWidget);
+    await tester.tap(find.byType(Card));
+    await tester.pumpAndSettle();
+    expect(find.byType(ElevatedButton), findsNWidgets(2));
+  });
+
+  testWidgets('Exercise can be edited through user input', (WidgetTester tester) async {
+    await tester.pumpWithScaffold(MultiProvider(providers: [
+      ChangeNotifierProvider(
+        create: (context) => ExerciseList([]),
+      ),
+      ChangeNotifierProvider<DbProvider>(
+          create: (context) => MockDbProvider())
+    ], child: const MyApp()));
+
+    await tester.tap(find.byType(ElevatedButton).last);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextFormField).first, "Test Widget 1");
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextFormField).at(1), "Test Widget 1");
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextFormField).at(2), "https://www.youtube.com/watch?v=IODxDxX7oi4&ab_channel=Calisthenicmovement");
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ElevatedButton).last);
+    await tester.pumpAndSettle();
+    expect(find.byType(ExerciseListView), findsOneWidget);
+    await tester.tap(find.byType(Checkbox));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text("Test Widget 1"));
+    await tester.pumpAndSettle();
+    expect(find.byType(TextFormField), findsNWidgets(3));
+    expect(find.byType(ElevatedButton), findsNWidgets(5));
+    await tester.enterText(find.byType(TextFormField).first, "Test Widget 2");
+    await tester.pumpAndSettle();
+    await tester.tap(find.byType(ElevatedButton).last);
+    await tester.pumpAndSettle();
+    expect(find.text("Test Widget 2"), findsOneWidget);
   });
 }
