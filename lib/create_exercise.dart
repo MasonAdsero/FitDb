@@ -78,14 +78,13 @@ class _ExerciseForm extends State<ExerciseForm> {
     }
   }
 
-  void removeImage(){
+  void removeImage() {
     setState(() {
       imageLink = null;
     });
-
   }
 
-  void removeVideo(){
+  void removeVideo() {
     setState(() {
       videoLink = null;
     });
@@ -102,6 +101,7 @@ class _ExerciseForm extends State<ExerciseForm> {
           key: _formKey,
           child: Column(children: <Widget>[
             TextFormField(
+              key: const Key("TitleTextEditor"),
               decoration: const InputDecoration(
                   labelText: "Exercise Title",
                   hintText: "Enter the title of the exercise"),
@@ -114,6 +114,7 @@ class _ExerciseForm extends State<ExerciseForm> {
               },
             ),
             TextFormField(
+              key: const Key("DescTextEditor"),
               decoration: const InputDecoration(
                   labelText: "Exercise Description",
                   hintText: "Enter a description for the exercise"),
@@ -125,6 +126,7 @@ class _ExerciseForm extends State<ExerciseForm> {
               },
             ),
             TextFormField(
+              key: const Key("VideoTextEditor"),
               decoration: const InputDecoration(
                   labelText: "Exercise Youtube Video Link (Optional)",
                   hintText: "Enter a link for a youtubeVideo"),
@@ -163,12 +165,15 @@ class _ExerciseForm extends State<ExerciseForm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                      onPressed: removeImage, child: const Text("Remove Photo")),
+                      onPressed: removeImage,
+                      child: const Text("Remove Photo")),
                   const SizedBox(width: 5),
                   ElevatedButton(
-                      onPressed: removeVideo, child: const Text("Remove Video")),
+                      onPressed: removeVideo,
+                      child: const Text("Remove Video")),
                 ]),
             ElevatedButton(
+                key: const Key("ExerciseSubmitButton"),
                 onPressed: _submit,
                 child: const Text("Finish exercise creation"))
           ]),

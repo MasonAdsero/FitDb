@@ -1,4 +1,6 @@
+import 'package:fit_db_project/firebase_data.dart';
 import 'package:flutter/material.dart';
+import 'package:fit_db_project/create_exercise.dart';
 import 'package:fit_db_project/main.dart';
 import 'package:provider/provider.dart';
 import 'package:fit_db_project/exercise_model.dart';
@@ -15,7 +17,7 @@ extension WithScaffold on WidgetTester {
       pumpWidget(MaterialApp(home: Scaffold(body: widget)));
 }
 
-@GenerateMocks([FitDatabase])
+@GenerateMocks([FitDatabase, FirestoreTaskDataStore, DbProvider])
 void main() {
   setUp(() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -61,8 +63,65 @@ void main() {
     expect(find.byType(BottomAppBar), findsOneWidget);
   });
 
-  testWidgets('Exercise form displays all fields', (widgetTester) async {
-    final exerciseProvider = ExerciseList([]);
+  testWidgets('Exercise form displays all fields and buttons',
+      (WidgetTester tester) async {
     final db = MockFitDatabase();
+    final fs = MockFirestoreTaskDataStore();
+    await tester.pumpWithScaffold(MultiProvider(providers: [
+      ChangeNotifierProvider(
+        create: (context) => ExerciseList([]),
+      ),
+      ChangeNotifierProvider(create: ((context) => DbProvider(db, fs)))
+    ], child: ExerciseForm()));
+    final title = find.byKey(const Key("TitleTextEditor"));
+    final desc = find.byKey(const Key("DescTextEditor"));
+    final youVideo = find.byKey(const Key("VideoTextEditor"));
+    final photo = find.text("Take Photo");
+    final video = find.text("Take Video");
+    expect(title, findsOneWidget);
+    expect(desc, findsOneWidget);
+    expect(youVideo, findsOneWidget);
+    expect(photo, findsOneWidget);
+    expect(video, findsOneWidget);
+  });
+
+  testWidgets('Exercise form does not create empty exercise',
+      (WidgetTester tester) async {
+    final dbprov = MockDbProvider();
+    final exerciseList = ExerciseList([]);
+    await tester.pumpWithScaffold(MultiProvider(providers: [
+      ChangeNotifierProvider(
+        create: (context) => exerciseList,
+      ),
+      ChangeNotifierProvider(create: ((context) => dbprov))
+    ], child: ExerciseForm()));
+
+    final submit = find.byKey(const Key("ExerciseSubmitButton"));
+    await tester.tap(submit);
+    await tester.pump();
+    expect(find.byType(ExerciseForm), findsOneWidget);
+    expect(exerciseList.exercises.length, 0);
+  });
+
+  testWidgets('Exercise form creates exercise', (WidgetTester tester) async {
+    final mockdb = MockDbProvider();
+    when(mockdb.insertExercise(Exercise(1, "random", "random")))
+        .thenAnswer((realInvocation) async {});
+    final exerciseList = ExerciseList([]);
+    await tester.pumpWithScaffold(MultiProvider(providers: [
+      ChangeNotifierProvider(
+        create: (context) => exerciseList,
+      ),
+      ChangeNotifierProvider<DbProvider>(create: ((context) => mockdb))
+    ], child: ExerciseForm()));
+    final title = find.byKey(const Key("TitleTextEditor"));
+    await tester.enterText(title, "random");
+    final desc = find.byKey(const Key("DescTextEditor"));
+    await tester.enterText(desc, "random");
+    final submit = find.byKey(const Key("ExerciseSubmitButton"));
+    await tester.tap(submit);
+    await tester.pumpAndSettle();
+    expect(find.byType(ExerciseForm), findsNothing);
+    expect(exerciseList.exercises.length, 1);
   });
 }

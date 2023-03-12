@@ -4,6 +4,7 @@ import 'display_exercise.dart';
 import 'exercise_list_view.dart';
 import 'exercise_model.dart';
 import 'exercise_provider.dart';
+import 'firebase_data.dart';
 import 'db_provider.dart';
 import 'sqflite_db.dart';
 import 'dart:async';
@@ -19,8 +20,8 @@ void main() async {
 
   final db = FitDatabase('fit_database16.db');
   await db.openDB();
-
-  DbProvider dbProvider = DbProvider(db);
+  final fs = FirestoreTaskDataStore();
+  DbProvider dbProvider = DbProvider(db, fs);
   await dbProvider.syncFirebaseWithLocal();
 
   List<Exercise> exercises = await db.getExercises();
@@ -37,7 +38,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -57,7 +57,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     //context.read<DbProvider>().syncFirebaseWithLocal();
@@ -67,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-          child: ExerciseListView(context: context),
+        child: ExerciseListView(context: context),
       ),
       bottomNavigationBar: BottomAppBar(
           child: Container(
@@ -79,9 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                ExerciseForm()
-                        ));
+                            builder: (context) => ExerciseForm()));
                   },
                   child: const Icon(Icons.add_circle_outline),
                 ),

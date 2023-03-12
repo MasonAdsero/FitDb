@@ -3,9 +3,12 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
+import 'dart:ui' as _i7;
 
-import 'package:fit_db_project/exercise_model.dart' as _i4;
+import 'package:fit_db_project/db_provider.dart' as _i6;
+import 'package:fit_db_project/exercise_model.dart' as _i5;
+import 'package:fit_db_project/firebase_data.dart' as _i3;
 import 'package:fit_db_project/sqflite_db.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -19,6 +22,27 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
+
+class _FakeFitDatabase_0 extends _i1.SmartFake implements _i2.FitDatabase {
+  _FakeFitDatabase_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeFirestoreTaskDataStore_1 extends _i1.SmartFake
+    implements _i3.FirestoreTaskDataStore {
+  _FakeFirestoreTaskDataStore_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
 
 /// A class which mocks [FitDatabase].
 ///
@@ -50,27 +74,36 @@ class MockFitDatabase extends _i1.Mock implements _i2.FitDatabase {
         returnValueForMissingStub: null,
       );
   @override
-  _i3.Future<void> openDB() => (super.noSuchMethod(
+  _i4.Future<void> openDB() => (super.noSuchMethod(
         Invocation.method(
           #openDB,
           [],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
   @override
-  _i3.Future<void> insertExercise(_i4.Exercise? exercise) =>
+  _i4.Future<void> resetTables() => (super.noSuchMethod(
+        Invocation.method(
+          #resetTables,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> insertExercise(_i5.Exercise? exercise) =>
       (super.noSuchMethod(
         Invocation.method(
           #insertExercise,
           [exercise],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
   @override
-  _i3.Future<void> insertChartData(
-    _i4.Exercise? exercise,
+  _i4.Future<void> insertChartData(
+    _i5.Exercise? exercise,
     int? progress,
     String? progressTimes,
   ) =>
@@ -83,12 +116,12 @@ class MockFitDatabase extends _i1.Mock implements _i2.FitDatabase {
             progressTimes,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
   @override
-  _i3.Future<void> updateChartData(
-    _i4.Exercise? exercise,
+  _i4.Future<void> updateChartData(
+    _i5.Exercise? exercise,
     int? progress,
     String? progressTimes,
   ) =>
@@ -101,36 +134,36 @@ class MockFitDatabase extends _i1.Mock implements _i2.FitDatabase {
             progressTimes,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
   @override
-  _i3.Future<List<_i4.Exercise>> getExercises() => (super.noSuchMethod(
+  _i4.Future<List<_i5.Exercise>> getExercises() => (super.noSuchMethod(
         Invocation.method(
           #getExercises,
           [],
         ),
-        returnValue: _i3.Future<List<_i4.Exercise>>.value(<_i4.Exercise>[]),
-      ) as _i3.Future<List<_i4.Exercise>>);
+        returnValue: _i4.Future<List<_i5.Exercise>>.value(<_i5.Exercise>[]),
+      ) as _i4.Future<List<_i5.Exercise>>);
   @override
-  _i3.Future<void> updateExercise(_i4.Exercise? exercise) =>
+  _i4.Future<void> updateExercise(_i5.Exercise? exercise) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateExercise,
           [exercise],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
   @override
-  _i3.Future<void> deleteExercise(int? id) => (super.noSuchMethod(
+  _i4.Future<void> deleteExercise(int? id) => (super.noSuchMethod(
         Invocation.method(
           #deleteExercise,
           [id],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
   @override
   Map<String, dynamic> mapChart(
     int? exercise,
@@ -149,12 +182,244 @@ class MockFitDatabase extends _i1.Mock implements _i2.FitDatabase {
         returnValue: <String, dynamic>{},
       ) as Map<String, dynamic>);
   @override
-  _i3.Future<void> deleteDatabase() => (super.noSuchMethod(
+  _i4.Future<void> deleteDatabase() => (super.noSuchMethod(
         Invocation.method(
           #deleteDatabase,
           [],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+}
+
+/// A class which mocks [FirestoreTaskDataStore].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFirestoreTaskDataStore extends _i1.Mock
+    implements _i3.FirestoreTaskDataStore {
+  MockFirestoreTaskDataStore() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<List<_i5.Exercise>> getForUser() => (super.noSuchMethod(
+        Invocation.method(
+          #getForUser,
+          [],
+        ),
+        returnValue: _i4.Future<List<_i5.Exercise>>.value(<_i5.Exercise>[]),
+      ) as _i4.Future<List<_i5.Exercise>>);
+}
+
+/// A class which mocks [DbProvider].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockDbProvider extends _i1.Mock implements _i6.DbProvider {
+  MockDbProvider() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.FitDatabase get db => (super.noSuchMethod(
+        Invocation.getter(#db),
+        returnValue: _FakeFitDatabase_0(
+          this,
+          Invocation.getter(#db),
+        ),
+      ) as _i2.FitDatabase);
+  @override
+  set db(_i2.FitDatabase? _db) => super.noSuchMethod(
+        Invocation.setter(
+          #db,
+          _db,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  _i3.FirestoreTaskDataStore get fs => (super.noSuchMethod(
+        Invocation.getter(#fs),
+        returnValue: _FakeFirestoreTaskDataStore_1(
+          this,
+          Invocation.getter(#fs),
+        ),
+      ) as _i3.FirestoreTaskDataStore);
+  @override
+  set fs(_i3.FirestoreTaskDataStore? _fs) => super.noSuchMethod(
+        Invocation.setter(
+          #fs,
+          _fs,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  bool get hasListeners => (super.noSuchMethod(
+        Invocation.getter(#hasListeners),
+        returnValue: false,
+      ) as bool);
+  @override
+  _i4.Future<void> syncFirebaseWithLocal() => (super.noSuchMethod(
+        Invocation.method(
+          #syncFirebaseWithLocal,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> syncExercises(
+    List<_i5.Exercise>? fb_exercises,
+    List<_i5.Exercise>? db_exercises,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #syncExercises,
+          [
+            fb_exercises,
+            db_exercises,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> authUser() => (super.noSuchMethod(
+        Invocation.method(
+          #authUser,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> insertExercise(_i5.Exercise? exercise) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #insertExercise,
+          [exercise],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> insertOrUpdateFBChartData(
+    _i5.Exercise? exercise,
+    int? progress,
+    String? progressTimes,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #insertOrUpdateFBChartData,
+          [
+            exercise,
+            progress,
+            progressTimes,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> insertChartData(
+    _i5.Exercise? exercise,
+    int? progress,
+    String? progressTimes,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #insertChartData,
+          [
+            exercise,
+            progress,
+            progressTimes,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> updateChartData(
+    _i5.Exercise? exercise,
+    int? progress,
+    String? progressTimes,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateChartData,
+          [
+            exercise,
+            progress,
+            progressTimes,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<List<_i5.Exercise>> getExercises() => (super.noSuchMethod(
+        Invocation.method(
+          #getExercises,
+          [],
+        ),
+        returnValue: _i4.Future<List<_i5.Exercise>>.value(<_i5.Exercise>[]),
+      ) as _i4.Future<List<_i5.Exercise>>);
+  @override
+  _i4.Future<void> updateExercise(_i5.Exercise? exercise) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateExercise,
+          [exercise],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> deleteExercise(int? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteExercise,
+          [id],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  _i4.Future<void> deleteDatabase() => (super.noSuchMethod(
+        Invocation.method(
+          #deleteDatabase,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+  @override
+  void addListener(_i7.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #addListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void removeListener(_i7.VoidCallback? listener) => super.noSuchMethod(
+        Invocation.method(
+          #removeListener,
+          [listener],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  void notifyListeners() => super.noSuchMethod(
+        Invocation.method(
+          #notifyListeners,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
 }
