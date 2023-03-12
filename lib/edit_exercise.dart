@@ -200,7 +200,9 @@ class _EditExerciseForm extends State<EditExerciseForm> {
                       child: const Text("Remove Video")),
                 ]),
             ElevatedButton(
-                onPressed: _submit, child: const Text("Finish Editing"))
+                key: const Key("finishEditing"),
+                onPressed: _submit,
+                child: const Text("Finish Editing"))
           ]),
         )));
   }
