@@ -116,6 +116,13 @@ class _EditExerciseForm extends State<EditExerciseForm> {
 
   @override
   Widget build(BuildContext context) {
+    final hasUserImage =
+        widget.exercise.image != null && widget.exercise.image != "";
+    final hasUserVideo =
+        widget.exercise.video != null && widget.exercise.video != "";
+    final hasYouTubeVideo = widget.exercise.youtubeLink != null &&
+        widget.exercise.youtubeLink != "";
+
     return Scaffold(
         appBar: AppBar(
           title: const Text("Edit your exercise"),
@@ -164,10 +171,10 @@ class _EditExerciseForm extends State<EditExerciseForm> {
                   },
                 ),
                 const SizedBox(height: 10),
-                if (imageLink != null)
+                if (hasUserImage)
                   Image.file(File(imageLink!), width: 300, height: 300),
                 const SizedBox(height: 10),
-                if (videoLink != null)
+                if (hasUserVideo)
                   SizedBox(
                       height: 620,
                       width: 300,

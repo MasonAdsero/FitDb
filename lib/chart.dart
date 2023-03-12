@@ -43,11 +43,9 @@ class _ExerciseChartState extends State<ExerciseChart> {
         update
             ? context
                 .read<DbProvider>()
-                .db
                 .updateChartData(widget.currentExercise, progress, _date!)
             : context
                 .read<DbProvider>()
-                .db
                 .insertChartData(widget.currentExercise, progress, _date!);
         _date = null;
         _formKey.currentState!.reset();

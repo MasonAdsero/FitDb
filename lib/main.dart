@@ -13,20 +13,22 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final db = FitDatabase('fit_database3.db');
-  await db.openDB();
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  final db = FitDatabase('fit_database14.db');
+  await db.openDB();
+
+  DbProvider dbProvider = DbProvider(db);
+  await dbProvider.syncFirebaseWithLocal();
 
   List<Exercise> exercises = await db.getExercises();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(
       create: (context) => ExerciseList(exercises),
     ),
-    ChangeNotifierProvider(create: ((context) => DbProvider(db)))
+    ChangeNotifierProvider(create: ((context) => dbProvider))
   ], child: const MyApp()));
 }
 
@@ -35,6 +37,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -49,7 +52,6 @@ class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
 
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -58,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    //context.read<DbProvider>().syncFirebaseWithLocal();
 
     return Scaffold(
       appBar: AppBar(

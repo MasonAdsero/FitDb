@@ -35,15 +35,6 @@ class ExerciseView extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(5)));
     }
 
-    navigateBack() {
-      Navigator.pop(context, currentExercise);
-    }
-
-    navigateToEdit() {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => ExerciseForm()));
-    }
-
     return Scaffold(
         appBar: AppBar(
           title: Text(currentExercise.name),

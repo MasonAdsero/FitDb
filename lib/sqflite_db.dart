@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 class FitDatabase {
   late var dbName = 'fit_database.db';
 
-  late final database;
+  late var database;
 
   FitDatabase(this.dbName);
 
@@ -20,6 +20,20 @@ class FitDatabase {
       await db.execute(
           'CREATE TABLE charts(id INTEGER PRIMARY KEY, exercise_id INTEGER NOT NULL, progress INTEGER, progressTimes TEXT, FOREIGN KEY (exercise_id) REFERENCES exercises (id))');
     }, version: 1);
+  }
+
+  Future<void> resetTables() async {
+    final db = await database;
+    await db.execute(
+        'DROP TABLE exercises'
+    );
+    await db.execute(
+        'DROP TABLE charts'
+    );
+    await db.execute(
+        'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, video TEXT, image TEXT, youtubeLink TEXT)');
+    await db.execute(
+        'CREATE TABLE charts(id INTEGER PRIMARY KEY, exercise_id INTEGER NOT NULL, progress INTEGER, progressTimes TEXT, FOREIGN KEY (exercise_id) REFERENCES exercises (id))');
   }
 
   Future<void> insertExercise(Exercise exercise) async {

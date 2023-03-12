@@ -8,6 +8,16 @@ class Exercise {
   List<int> progress = [];
   List<String> progressTimes = [];
   Exercise(this.id, this.name, this.desc, [this.video, this.image, this.youtubeLink]);
+  Exercise.fromJson(Map<String, dynamic> data):
+    id = data["id"],
+    name = data["name"],
+    desc = data["desc"],
+    image = data["image"],
+    video = data["video"],
+    youtubeLink = data["youtubeLink"],
+    progress = data["progress"] == null ? [] : List<int>.from(data["progress"]),
+    progressTimes = data["progressTimes"] == null ? [] : List<String>.from(data["progressTimes"]);
+
 
   Map<String, dynamic> toMap() {
     return {
