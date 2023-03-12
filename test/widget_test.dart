@@ -255,8 +255,6 @@ void main() {
     exercise.video = "random";
     final prov = ExerciseList([exercise]);
     await tester.pumpWithProviderExercise(EditExerciseForm(exercise), prov);
-    //expect(find.text("Push-Ups"), findsOneWidget);
-    //expect(find.text("Strict form push ups"), findsOneWidget);
     await tester.dragUntilVisible(find.byKey(const Key("finishEditing")),
         find.byType(SingleChildScrollView), const Offset(0, 50));
     await tester.tap(find.byKey(const Key("finishEditing")));
