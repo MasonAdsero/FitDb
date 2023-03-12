@@ -20,8 +20,8 @@ void main() async {
 
   final db = FitDatabase('fit_database16.db');
   await db.openDB();
-  final fs = FirestoreTaskDataStore();
-  DbProvider dbProvider = DbProvider(db, fs);
+
+  DbProvider dbProvider = DbProvider(db);
   await dbProvider.syncFirebaseWithLocal();
 
   List<Exercise> exercises = await db.getExercises();
