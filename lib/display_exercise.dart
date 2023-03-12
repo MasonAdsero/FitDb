@@ -10,18 +10,25 @@ import 'create_exercise.dart';
 class ExerciseView extends StatelessWidget {
   ExerciseView({super.key, required this.currentExercise});
   final Exercise currentExercise;
-  static String myVideoId = "";
 
-  final YoutubePlayerController _controller = YoutubePlayerController(
-    initialVideoId: myVideoId,
-    flags: const YoutubePlayerFlags(
-      autoPlay: false,
-      mute: false,
-    ),
-  );
+
 
   @override
   Widget build(BuildContext context) {
+    String youtubeLink = "";
+    if(currentExercise.youtubeLink != null) {
+      youtubeLink = YoutubePlayer.convertUrlToId(currentExercise.youtubeLink ?? "") ?? "";
+    }
+
+    final YoutubePlayerController _controller = YoutubePlayerController(
+      initialVideoId: youtubeLink,
+      flags: const YoutubePlayerFlags(
+        autoPlay: false,
+        mute: false,
+      ),
+    );
+
+
     final hasUserImage =
         currentExercise.image != null && currentExercise.image != "";
     final hasUserVideo =
