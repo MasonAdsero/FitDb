@@ -17,7 +17,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  final db = FitDatabase('fit_database14.db');
+  final db = FitDatabase('fit_database16.db');
   await db.openDB();
 
   DbProvider dbProvider = DbProvider(db);

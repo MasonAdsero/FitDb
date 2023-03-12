@@ -73,9 +73,7 @@ class DbProvider with ChangeNotifier {
     FirebaseFirestore.instance.runTransaction((Transaction tx) async {
       DocumentSnapshot docSnapshot = await tx.get(docRef);
       if (docSnapshot.exists) {
-        print("exists");
         if (docSnapshot.data().toString().contains("progress")){
-          print("updating");
           // Update the field
           tx.update(docRef, <String, dynamic>{
             'progress': FieldValue.arrayUnion([progress])
@@ -85,7 +83,6 @@ class DbProvider with ChangeNotifier {
             'progressTimes': FieldValue.arrayUnion([progressTimes])
           });
         } else {
-          print("inserting");
           // Create the field and add the element to it
           tx.update(docRef, <String, dynamic>{
             'progress': [progress]
@@ -124,12 +121,24 @@ class DbProvider with ChangeNotifier {
 
   Future<void> updateExercise(Exercise exercise) async {
     await db.updateExercise(exercise);
-    print("inserted exercise");
+    FirebaseFirestore.instance.runTransaction((transaction) async =>
+    await transaction.update(FirebaseFirestore.instance.collection('exercises').doc(exercise.id.toString()),
+      {
+        "name": exercise.name,
+        "desc": exercise.desc,
+        "image": exercise.image,
+        "video": exercise.video,
+        "id": exercise.id,
+        "youtubeLink": exercise.youtubeLink
+      }
+    ));
     notifyListeners();
   }
 
   Future<void> deleteExercise(int id) async {
     await db.deleteExercise(id);
+    FirebaseFirestore.instance.runTransaction((transaction) async =>
+    await transaction.delete(FirebaseFirestore.instance.collection('exercises').doc(id.toString())));
     notifyListeners();
   }
 
@@ -137,6 +146,4 @@ class DbProvider with ChangeNotifier {
     await db.deleteDatabase();
     notifyListeners();
   }
-
-
 }
