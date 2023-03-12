@@ -1,3 +1,4 @@
+import 'package:fit_db_project/chart.dart';
 import 'package:fit_db_project/firebase_data.dart';
 import 'package:flutter/material.dart';
 import 'package:fit_db_project/create_exercise.dart';
@@ -8,13 +9,26 @@ import 'package:fit_db_project/exercise_provider.dart';
 import 'package:fit_db_project/db_provider.dart';
 import 'package:fit_db_project/sqflite_db.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:fit_db_project/chart.dart';
+import 'package:fit_db_project/drawChart.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'widget_test.mocks.dart';
 
 extension WithScaffold on WidgetTester {
   pumpWithScaffold(Widget widget) async =>
       pumpWidget(MaterialApp(home: Scaffold(body: widget)));
+
+  pumpWithProvider(Widget widget) async => pumpWidget(MaterialApp(
+          home: Scaffold(
+              body: MultiProvider(providers: [
+        ChangeNotifierProvider(
+          create: (context) => ExerciseList([]),
+        ),
+        ChangeNotifierProvider<DbProvider>(
+            create: ((context) => MockDbProvider()))
+      ], child: widget))));
 }
 
 @GenerateMocks([FitDatabase, FirestoreTaskDataStore, DbProvider])
@@ -44,6 +58,13 @@ void main() {
     db.deleteDatabase();
   });*/
 
+  testWidgets('MyApp displays is displaying MyHomePage',
+      (WidgetTester tester) async {
+    await tester.pumpWithProvider(MyApp());
+    final homePage = find.byType(MyHomePage);
+    expect(homePage, findsOneWidget);
+  });
+
   testWidgets('Home screen displays exercises', (WidgetTester tester) async {
     var exerciseOne = Exercise(1, "sit-ups", "10 sit-ups in one minute");
     var exerciseTwo = Exercise(2, "push-ups", "10 push-ups in one minute");
@@ -65,13 +86,13 @@ void main() {
 
   testWidgets('Exercise form displays all fields and buttons',
       (WidgetTester tester) async {
-    final db = MockFitDatabase();
-    final fs = MockFirestoreTaskDataStore();
+    final dbmock = MockDbProvider();
     await tester.pumpWithScaffold(MultiProvider(providers: [
       ChangeNotifierProvider(
         create: (context) => ExerciseList([]),
       ),
-      ChangeNotifierProvider(create: ((context) => DbProvider(db, fs)))
+      ChangeNotifierProvider<DbProvider>(
+          create: ((context) => MockDbProvider()))
     ], child: ExerciseForm()));
     final title = find.byKey(const Key("TitleTextEditor"));
     final desc = find.byKey(const Key("DescTextEditor"));
@@ -123,5 +144,36 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ExerciseForm), findsNothing);
     expect(exerciseList.exercises.length, 1);
+  });
+
+  testWidgets("Exercise Chart show no chart widget with no data",
+      (WidgetTester tester) async {
+    Exercise exercise = Exercise(0, "Push-Ups", "Strict form push Ups");
+    await tester.pumpWithProvider(ExerciseChart(currentExercise: exercise));
+
+    final chart = find.byType(DrawChart);
+    expect(chart, findsNothing);
+
+    final addReps = find.byKey(const Key("RepTextEditor"));
+    expect(addReps, findsOneWidget);
+
+    final pickDate = find.byKey(const Key("AddDate"));
+    expect(addReps, findsOneWidget);
+
+    final addWorkOut = find.byKey(const Key("AddWorkOutGraph"));
+    expect(addWorkOut, findsOneWidget);
+  });
+
+  testWidgets("Exercise Chart appears after data added",
+      (WidgetTester tester) async {
+    Exercise exercise = Exercise(0, "Push-Ups", "Strict form push Ups");
+    exercise.progress = [1];
+    exercise.progressTimes = ["2023-03-14"];
+    await tester.pumpWithProvider(ExerciseChart(currentExercise: exercise));
+
+    final addReps = find.byKey(const Key("RepTextEditor"));
+    await tester.enterText(addReps, "10");
+
+    expect(find.byType(DrawChart), findsOneWidget);
   });
 }

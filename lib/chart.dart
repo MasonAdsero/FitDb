@@ -67,6 +67,7 @@ class _ExerciseChartState extends State<ExerciseChart> {
           key: _formKey,
           child: Column(children: [
             TextFormField(
+              key: const Key("RepTextEditor"),
               controller: reps,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
@@ -88,6 +89,7 @@ class _ExerciseChartState extends State<ExerciseChart> {
               height: 15,
             ),
             ElevatedButton(
+              key: const Key("AddDate"),
               child: Container(child: const Text("pick a date")),
               onPressed: () {
                 showDialog(
@@ -108,17 +110,20 @@ class _ExerciseChartState extends State<ExerciseChart> {
                                           DateRangePickerSelectionMode.single,
                                     )),
                                 MaterialButton(
-                                  child: Text("OK"),
-                                  onPressed: () {
-                                    setState(() {
-                                      _date = _selected!;
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                ),
+                                    child: Text("OK"),
+                                    onPressed: () {
+                                      if (_selected != null) {
+                                        setState(() {
+                                          _date = _selected!;
+                                          _selected = null;
+                                        });
+                                        Navigator.pop(context);
+                                      }
+                                    }),
                                 MaterialButton(
                                   child: Text("Cancel"),
                                   onPressed: () {
+                                    _selected = null;
                                     Navigator.pop(context);
                                   },
                                 )
@@ -137,6 +142,7 @@ class _ExerciseChartState extends State<ExerciseChart> {
           ]),
         ),
         ElevatedButton(
+            key: const Key("AddWorkOutGraph"),
             onPressed: _addToGraph,
             child: const Text(
               "Add workout to graph",
