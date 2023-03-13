@@ -89,13 +89,17 @@ class _EditExerciseForm extends State<EditExerciseForm> {
 
   void removeImage() {
     setState(() {
-      imageLink = null;
+      if (imageLink != null) {
+        imageLink = null;
+      }
     });
   }
 
   void removeVideo() {
     setState(() {
-      videoLink = null;
+      if(videoLink != null){
+        videoLink = null;
+      }
     });
   }
 
@@ -169,10 +173,10 @@ class _EditExerciseForm extends State<EditExerciseForm> {
               },
             ),
             const SizedBox(height: 10),
-            if (hasUserImage)
+            if (imageLink != null && imageLink != "")
               Image.file(File(imageLink!), width: 300, height: 300),
             const SizedBox(height: 10),
-            if (hasUserVideo)
+            if (videoLink != null && videoLink != "")
               SizedBox(
                   height: 620,
                   width: 300,
