@@ -17,6 +17,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'widget_test.mocks.dart';
 
 extension WithScaffold on WidgetTester {
@@ -278,9 +279,7 @@ void main() {
     await tester.tap(find.byType(ElevatedButton).last);
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField).first, "Test Widget 1");
-    await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField).at(1), "Test Widget 1");
-    await tester.pumpAndSettle();
     await tester.tap(find.byType(ElevatedButton).last);
     await tester.pumpAndSettle();
     expect(find.byType(Card), findsOneWidget);
@@ -302,22 +301,17 @@ void main() {
     await tester.tap(find.byType(ElevatedButton).last);
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField).first, "Test Widget 1");
-    await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField).at(1), "Test Widget 1");
-    await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextFormField).at(2), "https://www.youtube.com/watch?v=IODxDxX7oi4&ab_channel=Calisthenicmovement");
-    await tester.pumpAndSettle();
     await tester.tap(find.byType(ElevatedButton).last);
     await tester.pumpAndSettle();
     expect(find.byType(ExerciseListView), findsOneWidget);
     await tester.tap(find.byType(Checkbox));
-    await tester.pumpAndSettle();
     await tester.tap(find.text("Test Widget 1"));
     await tester.pumpAndSettle();
     expect(find.byType(TextFormField), findsNWidgets(3));
     expect(find.byType(ElevatedButton), findsNWidgets(5));
     await tester.enterText(find.byType(TextFormField).first, "Test Widget 2");
-    await tester.pumpAndSettle();
     await tester.tap(find.byType(ElevatedButton).last);
     await tester.pumpAndSettle();
     expect(find.text("Test Widget 2"), findsOneWidget);
@@ -380,11 +374,9 @@ void main() {
     exercises.add(exerciseOne);
     exercises.add(exerciseTwo);
 
-    exercises.remove(exerciseTwo);
-
     var exerciseProvider = ExerciseList(exercises);
     exerciseProvider.modify(exerciseOne, "push-ups", "20 push-ups in one minute", null, null);
-
+    exerciseProvider.remove(exerciseTwo);
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: ChangeNotifierProvider(

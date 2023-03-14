@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'exercise_model.dart';
 import 'firebase_data.dart';
 import 'sqflite_db.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 
 class DbProvider with ChangeNotifier {
   FitDatabase db;
@@ -16,7 +14,7 @@ class DbProvider with ChangeNotifier {
 
   // get exercises from firebase, sync with local db
   Future<void> syncFirebaseWithLocal() async{
-    await authUser();
+    await FirebaseAuth.instance.signInAnonymously();
     List<Exercise> fb_exercises = await fs.getForUser();
     var db_exercises = await db.getExercises();
 
@@ -30,7 +28,6 @@ class DbProvider with ChangeNotifier {
 
   Future<void> syncExercises(List<Exercise> fb_exercises, List<Exercise> db_exercises) async{
     await db.resetTables();
-
     for (var i = 0; i < fb_exercises.length; i++) {
       var currentExercise = fb_exercises[i];
       await insertExercise(currentExercise);
@@ -41,16 +38,6 @@ class DbProvider with ChangeNotifier {
     }
     notifyListeners();
   }
-
-  Future<void> authUser() async {
-    try {
-      final userCredential =
-      await FirebaseAuth.instance.signInAnonymously();
-    } on FirebaseAuthException catch (e) {
-        print("Unknown error.");
-      }
-    }
-
 
   Future<void> insertExercise(Exercise exercise) async {
     await db.insertExercise(exercise);
@@ -64,20 +51,11 @@ class DbProvider with ChangeNotifier {
       DocumentSnapshot docSnapshot = await tx.get(docRef);
       if (docSnapshot.exists) {
         if (docSnapshot.data().toString().contains("progress")){
-          tx.update(docRef, <String, dynamic>{
-            'progress': FieldValue.arrayUnion([progress])
-          });
-
-          tx.update(docRef, <String, dynamic>{
-            'progressTimes': FieldValue.arrayUnion([progressTimes])
-          });
+          tx.update(docRef, <String, dynamic>{'progress': FieldValue.arrayUnion([progress])});
+          tx.update(docRef, <String, dynamic>{'progressTimes': FieldValue.arrayUnion([progressTimes])});
         } else {
-          tx.update(docRef, <String, dynamic>{
-            'progress': [progress]
-          });
-          tx.update(docRef, <String, dynamic>{
-            'progressTimes': [progressTimes]
-          });
+          tx.update(docRef, <String, dynamic>{'progress': [progress]});
+          tx.update(docRef, <String, dynamic>{'progressTimes': [progressTimes]});
         }
       }
     });

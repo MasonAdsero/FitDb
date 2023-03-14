@@ -8,7 +8,6 @@ import 'dart:io';
 class VideoPlayerScreen extends StatefulWidget {
 
   const VideoPlayerScreen({super.key, required this.link});
-
   final String link;
 
   @override
@@ -25,9 +24,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     _controller = VideoPlayerController.file(
       File(widget.link),
     );
-
     _initializeVideoPlayerFuture = _controller.initialize();
-
     _controller.setLooping(true);
   }
 
@@ -45,34 +42,28 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           FutureBuilder(
             future: _initializeVideoPlayerFuture,
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.connectionState == ConnectionState.done)
                 return AspectRatio(
                   aspectRatio: _controller.value.aspectRatio,
                   child: VideoPlayer(_controller),
                 );
-              } else {
+              else
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
-              }
             },
           ),
           const SizedBox(height: 10),
           FloatingActionButton(
             onPressed: () {
-              // Wrap the play or pause in a call to `setState`. This ensures the
-              // correct icon is shown.
               setState(() {
-                // If the video is playing, pause it.
-                if (_controller.value.isPlaying) {
+                if (_controller.value.isPlaying)
                   _controller.pause();
-                } else {
-                  // If the video is paused, play it.
+                else
                   _controller.play();
-                }
+
               });
             },
-            // Display the correct icon depending on the state of the player.
             child: Icon(
               _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
             ),
