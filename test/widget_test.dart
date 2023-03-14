@@ -389,5 +389,6 @@ void main() {
                 child: MyHomePage(title: 'FitDB')))));
 
     expect(find.text("push-ups"), findsOneWidget);
+    expect(find.text("sit-ups"), findsNothing);
   });
 }
