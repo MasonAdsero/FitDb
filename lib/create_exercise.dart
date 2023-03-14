@@ -55,7 +55,7 @@ class _ExerciseForm extends State<ExerciseForm> {
     if(isImage)
       media = await _picker.pickImage(source: ImageSource.camera);
     else
-      media = await _picker.pickImage(source: ImageSource.camera);
+      media = await _picker.pickVideo(source: ImageSource.camera);
     if (media != null) {
       final mediaSaveDirectory = await getApplicationDocumentsDirectory();
       final mediaSavePath = mediaSaveDirectory.path;
