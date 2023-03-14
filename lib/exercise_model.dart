@@ -29,10 +29,4 @@ class Exercise {
       'youtubeLink': youtubeLink
     };
   }
-
-  @override
-  String toString() {
-    // TODO: implement toString
-    return 'Exercise{$id, $name, $desc, ${video ?? "none"}, ${image ?? 'none'}, ${youtubeLink ?? 'none'}}';
-  }
 }

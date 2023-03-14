@@ -59,49 +59,39 @@ class _EditExerciseForm extends State<EditExerciseForm> {
     }
   }
 
-  _takeImage() async {
-    removeImage();
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      final imageSaveDirectory = await getApplicationDocumentsDirectory();
-      final imageSavePath = imageSaveDirectory.path;
-      final imageName = image.name;
-      final imageWithPath = '$imageSavePath/$imageName';
-      await image.saveTo(imageWithPath);
+  _captureMedia(bool isImage) async {
+    if(isImage)
+      _removeMedia(true);
+    else
+      _removeMedia(false);
+    XFile? media;
+    if(isImage) {
+      media = await _picker.pickImage(source: ImageSource.camera);
+    }
+    else{
+      media = await _picker.pickImage(source: ImageSource.camera);
+    }
+    if (media != null) {
+      final mediaSaveDirectory = await getApplicationDocumentsDirectory();
+      final mediaSavePath = mediaSaveDirectory.path;
+      final mediaName = media.name;
+      final mediaWithPath = '$mediaSavePath/$mediaName';
+      await media.saveTo(mediaWithPath);
       setState(() {
-        imageLink = imageWithPath;
+        if(isImage)
+          imageLink = mediaWithPath;
+        else
+          videoLink = mediaWithPath;
       });
     }
   }
 
-  _takeVideo() async {
-    removeVideo();
-    final XFile? video = await _picker.pickVideo(source: ImageSource.camera);
-    if (video != null) {
-      final videoSaveDirectory = await getApplicationDocumentsDirectory();
-      final videoSavePath = videoSaveDirectory.path;
-      final videoName = video.name;
-      final videoWithPath = '$videoSavePath/$videoName';
-      await video.saveTo(videoWithPath);
-      setState(() {
-        videoLink = videoWithPath;
-      });
-    }
-  }
-
-  void removeImage() {
+  void _removeMedia(bool isImage) {
     setState(() {
-      if (imageLink != null) {
+      if(isImage)
         imageLink = null;
-      }
-    });
-  }
-
-  void removeVideo() {
-    setState(() {
-      if(videoLink != null){
+      else
         videoLink = null;
-      }
     });
   }
 
@@ -182,21 +172,21 @@ class _EditExerciseForm extends State<EditExerciseForm> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                      onPressed: _takeImage, child: const Text("Take Photo")),
+                      onPressed: () => _captureMedia(true), child: const Text("Take Photo")),
                   const SizedBox(width: 5),
                   ElevatedButton(
-                      onPressed: _takeVideo, child: const Text("Take Video")),
+                      onPressed: () => _captureMedia(false), child: const Text("Take Video")),
                 ]),
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                      onPressed: removeImage,
+                      onPressed: () => _removeMedia(true),
                       child: const Text("Remove Photo")),
                   const SizedBox(width: 5),
                   ElevatedButton(
-                      onPressed: removeVideo,
+                      onPressed: () => _removeMedia(false),
                       child: const Text("Remove Video")),
                 ]),
             ElevatedButton(

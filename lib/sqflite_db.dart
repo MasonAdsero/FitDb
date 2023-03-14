@@ -25,11 +25,9 @@ class FitDatabase {
   Future<void> resetTables() async {
     final db = await database;
     await db.execute(
-        'DROP TABLE exercises'
-    );
+        'DROP TABLE exercises');
     await db.execute(
-        'DROP TABLE charts'
-    );
+        'DROP TABLE charts');
     await db.execute(
         'CREATE TABLE exercises(id INTEGER PRIMARY KEY, name TEXT, desc TEXT, video TEXT, image TEXT, youtubeLink TEXT)');
     await db.execute(

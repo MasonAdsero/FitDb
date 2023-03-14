@@ -16,14 +16,12 @@ class DbProvider with ChangeNotifier {
 
   // get exercises from firebase, sync with local db
   Future<void> syncFirebaseWithLocal() async{
-    print("started sync");
     await authUser();
     List<Exercise> fb_exercises = await fs.getForUser();
     var db_exercises = await db.getExercises();
 
     for (int i = 0; i < fb_exercises.length; i++){
       if(!db_exercises.contains(fb_exercises[i])){
-        print("Sync exercises");
         await syncExercises(fb_exercises, db_exercises);
       }
     }
@@ -34,7 +32,6 @@ class DbProvider with ChangeNotifier {
     await db.resetTables();
 
     for (var i = 0; i < fb_exercises.length; i++) {
-      print("Inserting exercise into db");
       var currentExercise = fb_exercises[i];
       await insertExercise(currentExercise);
       for (var j = 0; j < currentExercise.progress.length; j++) {
@@ -49,17 +46,10 @@ class DbProvider with ChangeNotifier {
     try {
       final userCredential =
       await FirebaseAuth.instance.signInAnonymously();
-      print("Signed in with temporary account.");
     } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "operation-not-allowed":
-          print("Anonymous auth hasn't been enabled for this project.");
-          break;
-        default:
-          print("Unknown error.");
+        print("Unknown error.");
       }
     }
-  }
 
 
   Future<void> insertExercise(Exercise exercise) async {
@@ -74,7 +64,6 @@ class DbProvider with ChangeNotifier {
       DocumentSnapshot docSnapshot = await tx.get(docRef);
       if (docSnapshot.exists) {
         if (docSnapshot.data().toString().contains("progress")){
-          // Update the field
           tx.update(docRef, <String, dynamic>{
             'progress': FieldValue.arrayUnion([progress])
           });
@@ -83,7 +72,6 @@ class DbProvider with ChangeNotifier {
             'progressTimes': FieldValue.arrayUnion([progressTimes])
           });
         } else {
-          // Create the field and add the element to it
           tx.update(docRef, <String, dynamic>{
             'progress': [progress]
           });
@@ -100,7 +88,6 @@ class DbProvider with ChangeNotifier {
       Exercise exercise, int progress, String progressTimes) async {
     await db.insertChartData(exercise, progress, progressTimes);
     await insertOrUpdateFBChartData(exercise, progress, progressTimes);
-    print("inserted chart data");
     notifyListeners();
   }
 
@@ -108,21 +95,19 @@ class DbProvider with ChangeNotifier {
       Exercise exercise, int progress, String progressTimes) async {
     await db.updateChartData(exercise, progress, progressTimes);
     await insertOrUpdateFBChartData(exercise, progress, progressTimes);
-    print("updated chart data");
     notifyListeners();
   }
 
   Future<List<Exercise>> getExercises() async {
     await syncFirebaseWithLocal();
-    print("synced firebase with local");
     final exercises = await db.getExercises();
     return exercises;
   }
 
   Future<void> updateExercise(Exercise exercise) async {
     await db.updateExercise(exercise);
-    FirebaseFirestore.instance.runTransaction((transaction) async =>
-    await transaction.update(FirebaseFirestore.instance.collection('exercises').doc(exercise.id.toString()),
+    FirebaseFirestore.instance.runTransaction((Transaction tx) async =>
+    tx.update(FirebaseFirestore.instance.collection('exercises').doc(exercise.id.toString()),
       {
         "name": exercise.name,
         "desc": exercise.desc,
@@ -137,8 +122,8 @@ class DbProvider with ChangeNotifier {
 
   Future<void> deleteExercise(int id) async {
     await db.deleteExercise(id);
-    FirebaseFirestore.instance.runTransaction((transaction) async =>
-    await transaction.delete(FirebaseFirestore.instance.collection('exercises').doc(id.toString())));
+    FirebaseFirestore.instance.runTransaction((Transaction tx) async =>
+    await tx.delete(FirebaseFirestore.instance.collection('exercises').doc(id.toString())));
     notifyListeners();
   }
 

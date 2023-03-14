@@ -360,7 +360,7 @@ void main() {
     var exerciseProvider = ExerciseList(exercises);
 
     exerciseProvider.addProgress(exerciseOne, 10, "2023-03-10");
-    exerciseProvider.addProgress(exerciseOne, 12, "2023-03-12");
+    exerciseProvider.addProgress(exerciseOne, 12, "2023-03-10");
 
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
@@ -375,9 +375,12 @@ void main() {
 
   testWidgets('Exercise provider can modify exercises', (WidgetTester tester) async {
     var exerciseOne = Exercise(1, "sit-ups", "10 sit-ups in one minute");
-
+    var exerciseTwo = Exercise(1, "plank", "Plank for one minute");
     List<Exercise> exercises = [];
     exercises.add(exerciseOne);
+    exercises.add(exerciseTwo);
+
+    exercises.remove(exerciseTwo);
 
     var exerciseProvider = ExerciseList(exercises);
     exerciseProvider.modify(exerciseOne, "push-ups", "20 push-ups in one minute", null, null);
@@ -390,5 +393,6 @@ void main() {
 
     expect(find.text("push-ups"), findsOneWidget);
     expect(find.text("sit-ups"), findsNothing);
+    expect(find.text("plank"), findsNothing);
   });
 }
