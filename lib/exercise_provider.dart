@@ -41,7 +41,7 @@ class ExerciseList with ChangeNotifier {
   //If something isnt edited pass original value. May want to decompose
   //along the line.
   void modify(
-      Exercise exercise, String name, String desc, String video, String image) {
+      Exercise exercise, String name, String desc, String? video, String? image) {
     final int index = _exercises.indexOf(exercise);
     _exercises[index].name = name;
     _exercises[index].desc = desc;

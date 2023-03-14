@@ -350,4 +350,44 @@ void main() {
     inputJSON.remove("progressTimes");
     expect(inputJSON, outputJSON);
   });
+
+  testWidgets('Exercise provider can add progress to exercise and exercise displays with progress', (WidgetTester tester) async {
+    var exerciseOne = Exercise(1, "sit-ups", "10 sit-ups in one minute");
+
+    List<Exercise> exercises = [];
+    exercises.add(exerciseOne);
+
+    var exerciseProvider = ExerciseList(exercises);
+
+    exerciseProvider.addProgress(exerciseOne, 10, "2023-03-10");
+    exerciseProvider.addProgress(exerciseOne, 12, "2023-03-12");
+
+    await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+            body: ChangeNotifierProvider(
+                create: (context) => exerciseProvider,
+                child: MyHomePage(title: 'FitDB')))));
+
+    await tester.tap(find.text("sit-ups"));
+    await tester.pumpAndSettle();
+    expect(find.byType(DrawChart), findsOneWidget);
+  });
+
+  testWidgets('Exercise provider can modify exercises', (WidgetTester tester) async {
+    var exerciseOne = Exercise(1, "sit-ups", "10 sit-ups in one minute");
+
+    List<Exercise> exercises = [];
+    exercises.add(exerciseOne);
+
+    var exerciseProvider = ExerciseList(exercises);
+    exerciseProvider.modify(exerciseOne, "push-ups", "20 push-ups in one minute", null, null);
+
+    await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+            body: ChangeNotifierProvider(
+                create: (context) => exerciseProvider,
+                child: MyHomePage(title: 'FitDB')))));
+
+    expect(find.text("push-ups"), findsOneWidget);
+  });
 }
