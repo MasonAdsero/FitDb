@@ -216,6 +216,9 @@ void main() {
     expect(find.byType(SfDateRangePicker), findsNothing);
   });
 
+
+
+
   testWidgets("EditExerciseForm shows all buttons and fields",
       (WidgetTester tester) async {
     Exercise exercise = Exercise(0, "Push-Ups", "Strict form push Ups");
@@ -318,5 +321,33 @@ void main() {
     await tester.tap(find.byType(ElevatedButton).last);
     await tester.pumpAndSettle();
     expect(find.text("Test Widget 2"), findsOneWidget);
+  });
+
+  testWidgets('Exercise can be created from JSON and converted back to JSON', (WidgetTester tester) async {
+    var inputJSON =
+    {
+      "id": 1,
+      "name": "test",
+      "desc": "test_exercise",
+      "image": null,
+      "video": null,
+      "youtubeLink": null,
+      "progress": [],
+      "progressTimes": []
+    };
+    Exercise newExercise = Exercise.fromJson(inputJSON);
+
+    expect(newExercise.name, "test");
+    expect(newExercise.desc, "test_exercise");
+    expect(newExercise.image, null);
+    expect(newExercise.video, null);
+    expect(newExercise.youtubeLink, null);
+    expect(newExercise.progress, []);
+    expect(newExercise.progressTimes, []);
+
+    var outputJSON = newExercise.toMap();
+    inputJSON.remove("progress");
+    inputJSON.remove("progressTimes");
+    expect(inputJSON, outputJSON);
   });
 }
